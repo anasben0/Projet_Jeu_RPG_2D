@@ -1,7 +1,7 @@
 package model.item;
 
 /** 
-* Créaation des classes item
+* Création des classes item
 */
 public abstract class Item {
     private String nom;
