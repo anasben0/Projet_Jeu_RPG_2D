@@ -10,4 +10,6 @@ public class Potion extends Item {
     public int getSoins() {
         return soins;
     }
+
+    
 }
