@@ -1,38 +1,36 @@
 package controller;
 
-import java.awt.event.KeyListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
-// Ce controller gère interactions portant sur le joueur (mouvement, actions, etc.)
 public class KeyHandlerJoueur implements KeyListener {
 
-    public Boolean UpMoving, 
-                   DownMoving, 
-                   LeftMoving, 
-                   RightMoving;
+    // Initialiser explicitement à false
+    public boolean UpPressed = false, 
+                   DownPressed = false, 
+                   LeftPressed = false, 
+                   RightPressed = false;
 
     @Override
     public void keyTyped(KeyEvent e) {
-
+        // Pas besoin d'implémentation pour ce jeu
     }
 
     @Override
     public void keyPressed(KeyEvent e) {
-        // Get key code from the event
         int code = e.getKeyCode();
 
-        // verify which key was pressed
         if(code == KeyEvent.VK_Q) {
-            LeftMoving = true; // Moving left
+            LeftPressed = true;
         }
         if(code == KeyEvent.VK_D) {
-            RightMoving = true; // Moving right
+            RightPressed = true;
         }
         if(code == KeyEvent.VK_Z) {
-            UpMoving = true; // Moving up
+            UpPressed = true;
         }
         if(code == KeyEvent.VK_S) {
-            DownMoving = true; // Moving down
+            DownPressed = true;
         }
     }
 
@@ -40,19 +38,17 @@ public class KeyHandlerJoueur implements KeyListener {
     public void keyReleased(KeyEvent e) {
         int code = e.getKeyCode();
 
-        // verify which key was released
         if(code == KeyEvent.VK_Q) {
-            LeftMoving = false; // Stop moving left
+            LeftPressed = false;
         }
         if(code == KeyEvent.VK_D) {
-            RightMoving = false; // Stop moving right
+            RightPressed = false;
         }
         if(code == KeyEvent.VK_Z) {
-            UpMoving = false; // Stop moving up
+            UpPressed = false;
         }
         if(code == KeyEvent.VK_S) {
-            DownMoving = false; // Stop moving down
+            DownPressed = false;
         }
     }
-    
 }

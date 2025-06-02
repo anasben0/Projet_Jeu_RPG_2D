@@ -1,14 +1,19 @@
 package model.entite;
 
+import java.awt.image.BufferedImage;
+
 /**
 * Création des classes entités
 */
 public abstract class Entite {
-    private int vie;
-    private int vieMax;
-    private int force;
-    private int x;
-    private int y;
+    protected int vie;
+    protected int vieMax;
+    protected int force;
+    public int x;
+    public int y;
+    public int speed;
+    public BufferedImage up1, up2, down1, down2, right1, right2, left1, left2;
+    public String direction;
 
     Entite(int vie, int force) {
         this.vie = vie;
