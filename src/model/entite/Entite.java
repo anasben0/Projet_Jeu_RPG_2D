@@ -14,6 +14,8 @@ public abstract class Entite {
     public int speed;
     public BufferedImage up1, up2, down1, down2, right1, right2, left1, left2;
     public String direction;
+    public int SpriteCounter = 0;
+    public int SpriteNum = 1;
 
     Entite(int vie, int force) {
         this.vie = vie;
