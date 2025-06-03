@@ -19,21 +19,25 @@ public class Joueur extends Entite {
     private Inventaire inventaire;
     private Armure armure;
     private Arme arme;
+    public final int ScreenX, ScreenY;
 
     GamePanel gp;
-    KeyHandlerJoueur KeyH ; 
+    KeyHandlerJoueur KeyH;
 
     public Joueur (int vie, GamePanel gp, KeyHandlerJoueur KeyH) {
         super(vie, 1);
         this.inventaire = new Inventaire();
         this.gp = gp;
         this.KeyH = KeyH;
+        
+        ScreenX = gp.ScreenWidth/2 - gp.TileSize/2;
+        ScreenY = gp.ScreenHeight/2 - gp.TileSize/2;
         SetDefaultValues();
         getPlayerImage();
     }
     public void SetDefaultValues(){
-        x =100;
-        y=100;
+        Worldx =gp.TileSize*23;
+        Worldy =gp.TileSize*21;
         speed =4;
         direction = "down";
     }
@@ -59,19 +63,19 @@ public class Joueur extends Entite {
         KeyH.RightPressed == true || KeyH.LeftPressed == true){
             if (KeyH.UpPressed == true){
                 direction ="up";
-                y -= speed;
+                Worldy -= speed;
             }
-            else if (KeyH.DownPressed == true){
+            if (KeyH.DownPressed == true){
                 direction ="down";
-                y += speed;
+                Worldy += speed;
             }
-            else if (KeyH.RightPressed == true){
+            if (KeyH.RightPressed == true){
                 direction ="right";
-                x += speed;
+                Worldx += speed;
             }
-            else if (KeyH.LeftPressed == true){
+            if (KeyH.LeftPressed == true){
                 direction ="left";
-                x -= speed;
+                Worldx -= speed;
             }
             SpriteCounter ++;
             if (SpriteCounter > 10){
@@ -125,9 +129,8 @@ public class Joueur extends Entite {
                 break;
         }
 
-        g2.drawImage(image, x, y, gp.TileSize, gp.TileSize, null);
+        g2.drawImage(image, ScreenX, ScreenY, gp.TileSize, gp.TileSize, null);
 
-       
     }
     // Getters and Setters
     public Personnalisation getPersonnalisation() {
