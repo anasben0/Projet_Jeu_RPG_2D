@@ -7,6 +7,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import javax.swing.JPanel;
 import model.entite.Joueur;
+import model.item.Item;
 import tile.TileManager;
 
 
@@ -34,8 +35,12 @@ public class GamePanel extends JPanel implements Runnable{
     TileManager tileM = new TileManager(this);
     KeyHandlerJoueur KeyH = new KeyHandlerJoueur();
     Thread gameThread ;
+    public CollisionChecker cChecker = new CollisionChecker(this);
+    public AssetChecker aChecker = new AssetChecker(this);
 
     public Joueur joueur = new Joueur(10,this,KeyH);
+
+    public Item item[]= new Item[10];
 
 
     public GamePanel () {
@@ -44,6 +49,10 @@ public class GamePanel extends JPanel implements Runnable{
         this.setDoubleBuffered(true);
         this.addKeyListener(KeyH);
         this.setFocusable(true);
+    }
+
+    public void setUpGame () {
+        aChecker.createItem();
     }
 
     public void startGameThread (){
@@ -80,13 +89,24 @@ public void run() {
     public void update (){
         joueur.update();
     }
+
+    // ici on dessine les elements du jeu
     public void paintComponent (Graphics g) {
 
 
         super.paintComponent(g);
 
         Graphics2D g2 = (Graphics2D) g;
+        // Tile
         tileM.draw(g2);
+
+        //items
+        for (int i = 0; i < item.length; i++) {
+            if(item[i] != null) {
+                item[i].draw(g2, this);
+            }
+        }
+        //joueur
         joueur.draw(g2);
  
         g2.dispose();

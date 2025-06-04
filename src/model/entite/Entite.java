@@ -1,5 +1,6 @@
 package model.entite;
 
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
 /**
@@ -16,6 +17,8 @@ public abstract class Entite {
     public String direction;
     public int SpriteCounter = 0;
     public int SpriteNum = 1;
+    public Rectangle hitbox;
+    public boolean collisionOn = false;
 
     Entite(int vie, int force) {
         this.vie = vie;

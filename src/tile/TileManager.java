@@ -12,8 +12,8 @@ import javax.imageio.ImageIO;
 
 public class TileManager {
     GamePanel gp;
-    Tile [] tile;
-    int MapTileNum[][];
+    public Tile [] tile;
+    public int MapTileNum[][];
     // on initialise le tableau de tiles et le tableau de numéros de tiles
     public TileManager(GamePanel gp){
         this.gp=gp;
@@ -32,18 +32,21 @@ public class TileManager {
 
             tile[1] = new Tile();
             tile[1].image = ImageIO.read(getClass().getResourceAsStream("/res/Tiles/wall.png"));
+            tile[1].collision = true; // on indique que cette tile est un mur
 
             tile[2] = new Tile();
             tile[2].image = ImageIO.read(getClass().getResourceAsStream("/res/Tiles/water00.png"));
+            tile[2].collision = true; // on indique que cette tile est de l'eau
 
             tile[3] = new Tile();
             tile[3].image = ImageIO.read(getClass().getResourceAsStream("/res/Tiles/earth.png"));
 
             tile[4] = new Tile();
             tile[4].image = ImageIO.read(getClass().getResourceAsStream("/res/Tiles/tree.png"));
+            tile[4].collision = true; // on indique que cette tile est un arbre
 
             tile[5] = new Tile();
-            tile[5].image = ImageIO.read(getClass().getResourceAsStream("/res/Tiles/earth.png"));
+            tile[5].image = ImageIO.read(getClass().getResourceAsStream("/res/Tiles/sand.png"));
 
         }catch ( IOException e){
             e.printStackTrace();

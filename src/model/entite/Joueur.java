@@ -2,6 +2,7 @@ package model.entite;
 import Test.GamePanel;
 import controller.KeyHandlerJoueur;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import javax.imageio.ImageIO;
@@ -32,6 +33,9 @@ public class Joueur extends Entite {
         
         ScreenX = gp.ScreenWidth/2 - gp.TileSize/2;
         ScreenY = gp.ScreenHeight/2 - gp.TileSize/2;
+
+        hitbox = new Rectangle(8, 16, 32, 32); // hitbox du joueur
+        
         SetDefaultValues();
         getPlayerImage();
     }
@@ -63,20 +67,31 @@ public class Joueur extends Entite {
         KeyH.RightPressed == true || KeyH.LeftPressed == true){
             if (KeyH.UpPressed == true){
                 direction ="up";
-                Worldy -= speed;
             }
-            if (KeyH.DownPressed == true){
+            else if (KeyH.DownPressed == true){
                 direction ="down";
-                Worldy += speed;
             }
-            if (KeyH.RightPressed == true){
+            else if (KeyH.RightPressed == true){
                 direction ="right";
-                Worldx += speed;
             }
-            if (KeyH.LeftPressed == true){
+            else if (KeyH.LeftPressed == true){
                 direction ="left";
-                Worldx -= speed;
             }
+
+            // Collision Checker
+            collisionOn = false;
+            gp.cChecker.CheckTile(this);
+
+            if(collisionOn==false){
+                // Si pas de collision, on met à jour la position du joueur
+                switch (direction) {
+                    case "up": Worldy -= speed; break;
+                    case "down": Worldy += speed; break;
+                    case "left": Worldx -= speed; break;
+                    case "right": Worldx += speed; break;
+                }
+            }
+
             SpriteCounter ++;
             if (SpriteCounter > 10){
                 if(SpriteNum == 1){
