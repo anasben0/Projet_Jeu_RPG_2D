@@ -61,5 +61,72 @@ public class CollisionChecker {
                 break;
         }
     }
+
+    public int CheckObject(Entite entite, boolean Player) {
+        int index = 999;
+
+        for (int i = 0; i < gp.item.length; i++) {
+            if (gp.item[i] != null) {
+                // on a besoin de mettre à jour la hitbox de l'entité
+                entite.hitbox.x = entite.Worldx + entite.hitbox.x;
+                entite.hitbox.y = entite.Worldy + entite.hitbox.y;
+
+                gp.item[i].hitbox.x = gp.item[i].Worldx + gp.item[i].hitbox.x;
+                gp.item[i].hitbox.y = gp.item[i].Worldy + gp.item[i].hitbox.y;
+
+                switch(entite.direction) {
+                    case "up":
+                        entite.hitbox.y -= entite.speed;
+                        if ( entite.hitbox.intersects(gp.item[i].hitbox) ) {
+                            if(gp.item[i].collision == true) {
+                                entite.collisionOn = true;
+                            }
+                            if ( Player == true) {
+                                index = i; // on retourne l'index de l'item
+                            }
+                        }
+                        break;
+                    case "down":
+                        entite.hitbox.y += entite.speed;
+                        if ( entite.hitbox.intersects(gp.item[i].hitbox) ) {
+                            if(gp.item[i].collision == true) {
+                                entite.collisionOn = true;
+                            }
+                            if ( Player == true) {
+                                index = i; // on retourne l'index de l'item
+                            }
+                        }
+                        break;
+                    case "left":
+                        entite.hitbox.x -= entite.speed;
+                        if ( entite.hitbox.intersects(gp.item[i].hitbox) ) {
+                            if(gp.item[i].collision == true) {
+                                entite.collisionOn = true;
+                            }
+                            if ( Player == true) {
+                                index = i; // on retourne l'index de l'item
+                            }
+                        }
+                        break;
+                    case "right":
+                        entite.hitbox.x += entite.speed;
+                        if ( entite.hitbox.intersects(gp.item[i].hitbox) ) {
+                            if(gp.item[i].collision == true) {
+                                entite.collisionOn = true;
+                            }
+                            if ( Player == true) {
+                                index = i; // on retourne l'index de l'item
+                            }
+                        }
+                        break;
+                }
+                entite.hitbox.x = entite.solidAreaDefaultX;
+                entite.hitbox.y = entite.solidAreaDefaultY;
+                gp.item[i].hitbox.x = gp.item[i].solidAreaDefaultX;
+                gp.item[i].hitbox.y = gp.item[i].solidAreaDefaultY;
+            }
+        }
+        return index;
+    }
 }
 

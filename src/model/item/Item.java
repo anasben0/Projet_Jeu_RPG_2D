@@ -2,6 +2,7 @@ package model.item;
 
 import Test.GamePanel;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
 /** 
@@ -14,7 +15,8 @@ public abstract class Item {
     public BufferedImage image;
     public boolean collision = false;
     public int Worldx, Worldy;
-
+    public Rectangle hitbox = new Rectangle(0, 0, 48, 48); // hitbox de l'item
+    public int solidAreaDefaultX = 0, solidAreaDefaultY = 0;
     public String getNom() {
         return nom;
     }

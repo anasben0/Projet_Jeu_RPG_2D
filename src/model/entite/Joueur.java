@@ -25,6 +25,8 @@ public class Joueur extends Entite {
     GamePanel gp;
     KeyHandlerJoueur KeyH;
 
+    int hasKey = 0; // Indique si le joueur a la clé (0 = non, 1 = oui)
+
     public Joueur (int vie, GamePanel gp, KeyHandlerJoueur KeyH) {
         super(vie, 1);
         this.inventaire = new Inventaire();
@@ -35,6 +37,8 @@ public class Joueur extends Entite {
         ScreenY = gp.ScreenHeight/2 - gp.TileSize/2;
 
         hitbox = new Rectangle(8, 16, 32, 32); // hitbox du joueur
+        solidAreaDefaultX = hitbox.x;
+        solidAreaDefaultY = hitbox.y;
         
         SetDefaultValues();
         getPlayerImage();
@@ -81,6 +85,9 @@ public class Joueur extends Entite {
             // Collision Checker
             collisionOn = false;
             gp.cChecker.CheckTile(this);
+            // Vérification des collisions avec les objets
+            int itemIndex = gp.cChecker.CheckObject(this, true);
+            pickUpItem(itemIndex);
 
             if(collisionOn==false){
                 // Si pas de collision, on met à jour la position du joueur
@@ -105,6 +112,27 @@ public class Joueur extends Entite {
             
         }
         
+    }
+
+    public void pickUpItem(int index) {
+        // Ajoute l'item à l'inventaire du joueur
+        if (index != 999) {
+            String itemName = gp.item[index].nom;
+            switch( itemName) {
+                case "Clef":
+                    hasKey ++;
+                    gp.item[index] = null; // On retire l'item du jeu
+                    System.out.println("clé récupérée, nombre de clés : " + hasKey);
+                    break;
+                case "Porte":
+                    if (hasKey > 0) {
+                        gp.item[index] = null; // On retire l'item du jeu
+                        hasKey --; // On utilise une clé
+                        System.out.println("Porte ouverte, nombre de clés restantes : " + hasKey);
+                    }
+                    break;
+            }
+        }
     }
     public void draw(Graphics2D g2){
         BufferedImage image = null;

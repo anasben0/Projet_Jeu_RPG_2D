@@ -11,5 +11,6 @@ public class Porte extends Item {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        collision = true; // La porte est un objet solide
     }
 }

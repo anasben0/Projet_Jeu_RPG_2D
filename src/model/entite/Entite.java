@@ -18,6 +18,7 @@ public abstract class Entite {
     public int SpriteCounter = 0;
     public int SpriteNum = 1;
     public Rectangle hitbox;
+    public int solidAreaDefaultX, solidAreaDefaultY;
     public boolean collisionOn = false;
 
     Entite(int vie, int force) {
