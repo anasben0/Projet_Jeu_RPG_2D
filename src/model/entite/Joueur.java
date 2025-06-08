@@ -25,7 +25,7 @@ public class Joueur extends Entite {
     GamePanel gp;
     KeyHandlerJoueur KeyH;
 
-    int hasKey = 0; // Indique si le joueur a la clé (0 = non, 1 = oui)
+    public int hasKey = 0; // Indique si le joueur a la clé (0 = non, 1 = oui)
 
     public Joueur (int vie, GamePanel gp, KeyHandlerJoueur KeyH) {
         super(vie, 1);
@@ -120,17 +120,35 @@ public class Joueur extends Entite {
             String itemName = gp.item[index].nom;
             switch( itemName) {
                 case "Clef":
+                    gp.playSE(1);
                     hasKey ++;
                     gp.item[index] = null; // On retire l'item du jeu
-                    System.out.println("clé récupérée, nombre de clés : " + hasKey);
+                    gp.ui.showMessage("Clé récupérée !");
                     break;
                 case "Porte":
                     if (hasKey > 0) {
+                        gp.playSE(3);
                         gp.item[index] = null; // On retire l'item du jeu
                         hasKey --; // On utilise une clé
-                        System.out.println("Porte ouverte, nombre de clés restantes : " + hasKey);
+                        gp.ui.showMessage("Porte ouverte !");
+                    }
+                    else {
+                        gp.ui.showMessage("Vous n'avez pas de clé !");
                     }
                     break;
+                case "Bottes":
+                    gp.playSE(2);
+                    speed += 2; // Augmente la vitesse du joueur
+                    gp.item[index] = null; // On retire l'item du jeu
+                    gp.ui.showMessage("Bottes récupérées !");
+                    break;
+                case "Coffre":
+                    gp.ui.gameFinished = true; // Fin du jeu
+                    gp.ui.showMessage("Vous avez gagné !");
+                    gp.stopMusic();
+                    gp.playSE(4); // Son de victoire
+                    break;
+
             }
         }
     }

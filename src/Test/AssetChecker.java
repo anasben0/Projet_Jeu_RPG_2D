@@ -1,5 +1,6 @@
 package Test;
 
+import model.item.Bottes;
 import model.item.Clef;
 import model.item.Coffre;
 import model.item.Porte;
@@ -40,6 +41,10 @@ public class AssetChecker {
         gp.item[6] = new Coffre();
         gp.item[6].Worldx = 10 * gp.TileSize;
         gp.item[6].Worldy = 7 * gp.TileSize;
+
+        gp.item[7] = new Bottes();
+        gp.item[7].Worldx = 37 * gp.TileSize;
+        gp.item[7].Worldy = 43 * gp.TileSize;
 
     }
 }
