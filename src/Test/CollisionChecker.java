@@ -128,5 +128,97 @@ public class CollisionChecker {
         }
         return index;
     }
+    //collision entre entité
+    public int checkEntite(Entite entite, Entite[] target) {
+        int index = 999;
+
+        for (int i = 0; i <target.length; i++) {
+
+            if (target[i] != null) {
+                // on a besoin de mettre à jour la hitbox de l'entité
+                entite.hitbox.x = entite.Worldx + entite.hitbox.x;
+                entite.hitbox.y = entite.Worldy + entite.hitbox.y;
+
+                target[i].hitbox.x = target[i].Worldx + target[i].hitbox.x;
+                target[i].hitbox.y = target[i].Worldy + target[i].hitbox.y;
+
+                switch(entite.direction) {
+                    case "up":
+                        entite.hitbox.y -= entite.speed;
+                        if ( entite.hitbox.intersects(target[i].hitbox) ) {
+                            entite.collisionOn = true;
+                            index = i; // on retourne l'index de l'item
+                        }
+                        break;
+                    case "down":
+                        entite.hitbox.y += entite.speed;
+                        if ( entite.hitbox.intersects(target[i].hitbox) ) {
+                            entite.collisionOn = true;
+                            index = i; // on retourne l'index de l'item
+                        }
+                        break;
+                    case "left":
+                        entite.hitbox.x -= entite.speed;
+                        if ( entite.hitbox.intersects(target[i].hitbox) ) {
+                            entite.collisionOn = true;
+                            index = i; // on retourne l'index de l'item
+                        }
+                        break;
+                    case "right":
+                        entite.hitbox.x += entite.speed;
+                        if ( entite.hitbox.intersects(target[i].hitbox) ) {
+                            entite.collisionOn = true;
+                            index = i; // on retourne l'index de l'item
+                        }
+                        break;
+                }
+                entite.hitbox.x = entite.solidAreaDefaultX;
+                entite.hitbox.y = entite.solidAreaDefaultY;
+                target[i].hitbox.x = target[i].solidAreaDefaultX;
+                target[i].hitbox.y = target[i].solidAreaDefaultY;
+            }
+
+        } return index;
+    }
+    public void checkJoueur(Entite entite) {
+        // on a besoin de mettre à jour la hitbox de l'entité
+                entite.hitbox.x = entite.Worldx + entite.hitbox.x;
+                entite.hitbox.y = entite.Worldy + entite.hitbox.y;
+
+                gp.joueur.hitbox.x = gp.joueur.Worldx + gp.joueur.hitbox.x;
+                gp.joueur.hitbox.y = gp.joueur.Worldy + gp.joueur.hitbox.y;
+
+                switch(entite.direction) {
+                    case "up":
+                        entite.hitbox.y -= entite.speed;
+                        if ( entite.hitbox.intersects(gp.joueur.hitbox) ) {
+                            entite.collisionOn = true;
+                        }
+                        break;
+                    case "down":
+                        entite.hitbox.y += entite.speed;
+                        if ( entite.hitbox.intersects(gp.joueur.hitbox) ) {
+                            entite.collisionOn = true;
+                        }
+                        break;
+                    case "left":
+                        entite.hitbox.x -= entite.speed;
+                        if ( entite.hitbox.intersects(gp.joueur.hitbox) ) {
+                            entite.collisionOn = true;
+                        }
+                        break;
+                    case "right":
+                        entite.hitbox.x += entite.speed;
+                        if ( entite.hitbox.intersects(gp.joueur.hitbox) ) {
+                            entite.collisionOn = true;
+                        }
+                        break;
+                }
+                entite.hitbox.x = entite.solidAreaDefaultX;
+                entite.hitbox.y = entite.solidAreaDefaultY;
+                gp.joueur.hitbox.x = gp.joueur.solidAreaDefaultX;
+                gp.joueur.hitbox.y = gp.joueur.solidAreaDefaultY;
+
+    }
 }
 

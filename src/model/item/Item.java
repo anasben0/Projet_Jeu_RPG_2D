@@ -17,6 +17,8 @@ public abstract class Item {
     public int Worldx, Worldy;
     public Rectangle hitbox = new Rectangle(0, 0, 48, 48); // hitbox de l'item
     public int solidAreaDefaultX = 0, solidAreaDefaultY = 0;
+
+    //UtilityTool uTool = new UtilityTool();
     public String getNom() {
         return nom;
     }

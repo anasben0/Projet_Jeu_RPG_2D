@@ -1,5 +1,5 @@
 package model.entite;
-import model.entite.Entite;
+import Test.GamePanel;
 
 /**
  * Classe représentant un monstre dans le jeu.
@@ -9,9 +9,9 @@ import model.entite.Entite;
 public class Monstre extends Entite {
     private String type;
     private int difficulté;
-    
-    public Monstre(int vie, int force, String type) {
-        super(vie, force);
+
+    public Monstre(int vie, int force, String type, GamePanel gp) {
+        super(gp);
         this.type = type;
     }
 
@@ -22,10 +22,6 @@ public class Monstre extends Entite {
 
     public int getDifficulté() {
         return difficulté;
-    }
-
-    public int getVie() {
-        return super.getVie();
     }
 
     public void setDifficulté(int difficulté) {

@@ -6,6 +6,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import javax.swing.JPanel;
+import model.entite.Entite;
 import model.entite.Joueur;
 import model.item.Item;
 import tile.TileManager;
@@ -33,7 +34,7 @@ public class GamePanel extends JPanel implements Runnable{
     // FPS
     int FPS =60;
     TileManager tileM = new TileManager(this);
-    KeyHandlerJoueur KeyH = new KeyHandlerJoueur();
+    public KeyHandlerJoueur KeyH = new KeyHandlerJoueur(this);
     public CollisionChecker cChecker = new CollisionChecker(this);
     public AssetChecker aChecker = new AssetChecker(this);
 
@@ -48,6 +49,13 @@ public class GamePanel extends JPanel implements Runnable{
     // Entités du jeu
     public Joueur joueur = new Joueur(10,this,KeyH);
     public Item item[]= new Item[10];
+    public Entite pnj[] = new Entite[10];
+    // Game state
+    public int gameState;
+    public final int titleState = 0; // écran titre
+    public final int playState = 1;
+    public final int pauseState = 2;
+    public final int dialogueState = 3;
 
 
     public GamePanel () {
@@ -60,7 +68,9 @@ public class GamePanel extends JPanel implements Runnable{
 
     public void setUpGame () {
         aChecker.createItem();
-        playMusic(0);
+        aChecker.setPNJ();
+        playMusic(4); // on démarre la musique de fond
+        gameState = titleState; // on démarre le jeu en mode "title"
     }
 
     public void startGameThread (){
@@ -95,7 +105,19 @@ public void run() {
     }
 }
     public void update (){
-        joueur.update();
+
+        if(gameState == playState) {
+            joueur.update();
+
+            for (int i = 0; i < pnj.length; i++) {
+                if(pnj[i] != null) {
+                    pnj[i].update();
+                }
+            }
+        }
+        if(gameState == pauseState) {
+            // on ne fait rien, le jeu est en pause
+        }
     }
 
     // ici on dessine les elements du jeu
@@ -103,22 +125,49 @@ public void run() {
 
 
         super.paintComponent(g);
-
         Graphics2D g2 = (Graphics2D) g;
-        // Tile
-        tileM.draw(g2);
-
-        //items
-        for (int i = 0; i < item.length; i++) {
-            if(item[i] != null) {
-                item[i].draw(g2, this);
-            }
+        
+        //debug
+        long drawstart = 0;
+        if(KeyH.checkDrawTime == true){
+            drawstart = System.nanoTime();
         }
-        //joueur
-        joueur.draw(g2);
-        // UI
-        ui.draw(g2);
- 
+        
+        // fenetre de titre
+        if (gameState == titleState){
+            ui.draw(g2);
+        }
+        //jeu en cours
+        else{
+            //tiles
+            tileM.draw(g2);
+
+            //items
+            for (int i = 0; i < item.length; i++) {
+                if(item[i] != null) {
+                    item[i].draw(g2, this);
+                }
+            }
+            //PNJ
+            for (int i = 0; i < pnj.length; i++) {
+                if(pnj[i] != null) {
+                    pnj[i].draw(g2);
+                }
+            }
+            //joueur
+            joueur.draw(g2);
+            // UI
+            ui.draw(g2);
+        }
+
+        //DEBUG
+        if(KeyH.checkDrawTime == true){
+                long drawend = System.nanoTime();
+                long passed = drawend - drawstart;
+                g2.setColor(Color.WHITE);
+                g2.drawString("drawtime: " + passed, 10, 400);
+                System.out.println("Draw Time:" + passed);
+        }
         g2.dispose();
 
     }

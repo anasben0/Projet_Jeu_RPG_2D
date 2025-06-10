@@ -21,16 +21,14 @@ public class Joueur extends Entite {
     private Armure armure;
     private Arme arme;
     public final int ScreenX, ScreenY;
-
-    GamePanel gp;
     KeyHandlerJoueur KeyH;
+    int standCounter = 0; // Compteur pour l'animation de marche
 
-    public int hasKey = 0; // Indique si le joueur a la clé (0 = non, 1 = oui)
+    //public int hasKey = 0; // Indique si le joueur a la clé (0 = non, 1 = oui)
 
     public Joueur (int vie, GamePanel gp, KeyHandlerJoueur KeyH) {
-        super(vie, 1);
+        super(gp);
         this.inventaire = new Inventaire();
-        this.gp = gp;
         this.KeyH = KeyH;
         
         ScreenX = gp.ScreenWidth/2 - gp.TileSize/2;
@@ -89,6 +87,10 @@ public class Joueur extends Entite {
             int itemIndex = gp.cChecker.CheckObject(this, true);
             pickUpItem(itemIndex);
 
+            // Vérification des collisions avec les PNJ
+            int pnjIndex = gp.cChecker.checkEntite(this, gp.pnj);
+            interactWithPNJ(pnjIndex);
+
             if(collisionOn==false){
                 // Si pas de collision, on met à jour la position du joueur
                 switch (direction) {
@@ -108,7 +110,7 @@ public class Joueur extends Entite {
                     SpriteNum = 1;
                 }
                 SpriteCounter=0;
-        }
+            }
             
         }
         
@@ -117,40 +119,19 @@ public class Joueur extends Entite {
     public void pickUpItem(int index) {
         // Ajoute l'item à l'inventaire du joueur
         if (index != 999) {
-            String itemName = gp.item[index].nom;
-            switch( itemName) {
-                case "Clef":
-                    gp.playSE(1);
-                    hasKey ++;
-                    gp.item[index] = null; // On retire l'item du jeu
-                    gp.ui.showMessage("Clé récupérée !");
-                    break;
-                case "Porte":
-                    if (hasKey > 0) {
-                        gp.playSE(3);
-                        gp.item[index] = null; // On retire l'item du jeu
-                        hasKey --; // On utilise une clé
-                        gp.ui.showMessage("Porte ouverte !");
-                    }
-                    else {
-                        gp.ui.showMessage("Vous n'avez pas de clé !");
-                    }
-                    break;
-                case "Bottes":
-                    gp.playSE(2);
-                    speed += 2; // Augmente la vitesse du joueur
-                    gp.item[index] = null; // On retire l'item du jeu
-                    gp.ui.showMessage("Bottes récupérées !");
-                    break;
-                case "Coffre":
-                    gp.ui.gameFinished = true; // Fin du jeu
-                    gp.ui.showMessage("Vous avez gagné !");
-                    gp.stopMusic();
-                    gp.playSE(4); // Son de victoire
-                    break;
-
+            
+        }
+    }
+    public void interactWithPNJ(int index) {
+        // Interagit avec le PNJ si le joueur est proche
+        if (index != 999) {
+            // Logique d'interaction avec le PNJ
+            if(gp.KeyH.enterPressed == true) {
+                gp.gameState = gp.dialogueState; // Change l'état du jeu pour afficher le dialogue
+                gp.pnj[index].speak(); // Appelle la méthode speak du PNJ pour afficher son dialogue
             }
         }
+        gp.KeyH.enterPressed = false; // Réinitialise la touche entrée
     }
     public void draw(Graphics2D g2){
         BufferedImage image = null;
