@@ -46,6 +46,10 @@ public class Joueur extends Entite {
         Worldy =gp.TileSize*21;
         speed =4;
         direction = "down";
+
+        // Satut du joueur
+        maxLife = 6;
+        life = maxLife;
     }
     public void getPlayerImage(){
         try{
@@ -91,6 +95,11 @@ public class Joueur extends Entite {
             int pnjIndex = gp.cChecker.checkEntite(this, gp.pnj);
             interactWithPNJ(pnjIndex);
 
+            // verification des collisions avec les events
+            gp.eHandler.checkEvent();
+
+            gp.KeyH.enterPressed = false; // Réinitialise la touche entrée
+
             if(collisionOn==false){
                 // Si pas de collision, on met à jour la position du joueur
                 switch (direction) {
@@ -131,7 +140,7 @@ public class Joueur extends Entite {
                 gp.pnj[index].speak(); // Appelle la méthode speak du PNJ pour afficher son dialogue
             }
         }
-        gp.KeyH.enterPressed = false; // Réinitialise la touche entrée
+        
     }
     public void draw(Graphics2D g2){
         BufferedImage image = null;

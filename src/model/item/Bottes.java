@@ -1,8 +1,12 @@
 package model.item;
 
-public class Bottes extends Item {
+import Test.GamePanel;
+import model.entite.Entite;
 
-    public Bottes() {
+public class Bottes extends Entite {
+
+    public Bottes(GamePanel gp) {
+        super(gp);
         nom = "Bottes";
         try {
             image = javax.imageio.ImageIO.read(getClass().getResourceAsStream("/res/Objects/boots.png"));

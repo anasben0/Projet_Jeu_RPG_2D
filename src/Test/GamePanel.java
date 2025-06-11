@@ -1,14 +1,17 @@
 package Test;
 
+import controller.EventHandler;
 import controller.KeyHandlerJoueur;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import javax.swing.JPanel;
 import model.entite.Entite;
 import model.entite.Joueur;
-import model.item.Item;
 import tile.TileManager;
 
 
@@ -33,6 +36,8 @@ public class GamePanel extends JPanel implements Runnable{
 
     // FPS
     int FPS =60;
+
+    // Systeme du jeu
     TileManager tileM = new TileManager(this);
     public KeyHandlerJoueur KeyH = new KeyHandlerJoueur(this);
     public CollisionChecker cChecker = new CollisionChecker(this);
@@ -44,12 +49,15 @@ public class GamePanel extends JPanel implements Runnable{
 
     public UI ui = new UI(this);
 
+    public EventHandler eHandler = new EventHandler(this);
+
     Thread gameThread ;
 
     // Entités du jeu
     public Joueur joueur = new Joueur(10,this,KeyH);
-    public Item item[]= new Item[10];
+    public Entite item[]= new Entite[10];
     public Entite pnj[] = new Entite[10];
+    ArrayList<Entite> entityList = new ArrayList<>();
     // Game state
     public int gameState;
     public final int titleState = 0; // écran titre
@@ -142,20 +150,40 @@ public void run() {
             //tiles
             tileM.draw(g2);
 
-            //items
-            for (int i = 0; i < item.length; i++) {
-                if(item[i] != null) {
-                    item[i].draw(g2, this);
-                }
-            }
+            // on ajoute les entités
+            entityList.add(joueur);
+            
             //PNJ
-            for (int i = 0; i < pnj.length; i++) {
-                if(pnj[i] != null) {
-                    pnj[i].draw(g2);
+            for(int i = 0; i<pnj.length;i++){
+                if(pnj[i] != null){
+                    entityList.add(pnj[i]);
+
                 }
             }
-            //joueur
-            joueur.draw(g2);
+
+            for ( int i = 0; i< item.length;i++){
+                if(item[i] != null){
+                    entityList.add(item[i]);
+
+                }
+            }
+            // SORT
+            Collections.sort(entityList, new Comparator<Entite>() {
+
+                @Override
+                public int compare(Entite e1, Entite e2){
+                    int result = Integer.compare(e1.Worldy, e2.Worldy);
+                    return result;
+                }
+            });
+
+            // on dessine les entités
+            for(int i=0; i<entityList.size();i++){
+                entityList.get(i).draw(g2);
+            }
+            // on debarasse
+            entityList.clear();
+
             // UI
             ui.draw(g2);
         }

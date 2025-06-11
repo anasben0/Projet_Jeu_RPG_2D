@@ -26,34 +26,88 @@ public class KeyHandlerJoueur implements KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
+
         int code = e.getKeyCode();
         // TITLE STATE
         if (gp.gameState == gp.titleState) {
-            if (code == KeyEvent.VK_Z) {
-                gp.ui.commandNum--;
-                if(gp.ui.commandNum < 0) {
-                    gp.ui.commandNum = 2; // Boucle entre les options
+            
+            if ( gp.ui.titleScreenState == 0){
+                
+                if (code == KeyEvent.VK_Z) {
+                    gp.ui.commandNum--;
+                    if(gp.ui.commandNum < 0) {
+                        gp.ui.commandNum = 2; // Boucle entre les options
+                    }
                 }
+                if (code == KeyEvent.VK_S) {
+                    gp.ui.commandNum++;
+                    if(gp.ui.commandNum > 2) {
+                        gp.ui.commandNum = 0; // Boucle entre les options
+                    }
+                }
+                if (code == KeyEvent.VK_ENTER) {
+                    if(gp.ui.commandNum == 0) {
+                        //gp.stopMusic();
+                        gp.ui.titleScreenState = 1; // Passe au menu de personnalisation
+                        gp.ui.commandNum = 0;
+                        //gp.repaint(); // Redessine l'écran
+                    }
+                    if(gp.ui.commandNum == 1) {
+                        // Logique pour les options
+                    }
+                    if(gp.ui.commandNum == 2) {
+                        System.exit(0); // Quitter le jeu
+                    }
+                }
+
             }
-            if (code == KeyEvent.VK_S) {
-                gp.ui.commandNum++;
-                if(gp.ui.commandNum > 2) {
-                    gp.ui.commandNum = 0; // Boucle entre les options
+            
+            else if ( gp.ui.titleScreenState == 1){
+                if (code == KeyEvent.VK_Z) {
+                    gp.ui.commandNum--;
+                    if(gp.ui.commandNum < 0) {
+                        gp.ui.commandNum = 3; // Boucle entre les options
+                    }
                 }
+                if (code == KeyEvent.VK_S) {
+                    gp.ui.commandNum++;
+                    if(gp.ui.commandNum > 3) {
+                        gp.ui.commandNum = 0; // Boucle entre les options
+                    }
+                }
+                if (code == KeyEvent.VK_ENTER) {
+                    if(gp.ui.commandNum == 0) {
+                        gp.stopMusic();
+                        gp.playMusic(0);
+                        System.out.println("Devient un crackhead");
+                        gp.gameState=gp.playState;
+                        //gp.playMusic(0);
+                    }
+                    if(gp.ui.commandNum == 1) {
+                        // Logique pour les options
+                        gp.stopMusic();
+                        gp.playMusic(0);
+                        System.out.println("force a toi");
+                        gp.gameState=gp.playState;
+
+                    }
+                    if(gp.ui.commandNum == 2) {
+                        gp.stopMusic();
+                        gp.playMusic(0);
+                        System.out.println("soit loong commme un lundi");
+                        gp.gameState=gp.playState;
+                    }
+                    if(gp.ui.commandNum == 3) {
+                        gp.ui.titleScreenState = 0;
+                        gp.ui.commandNum =0;
+                    }
+                }
+
             }
-            if (code == KeyEvent.VK_ENTER) {
-                if(gp.ui.commandNum == 0) {
-                    gp.gameState = gp.playState; // Commencer le jeu
-                    gp.playMusic(0);
-                }
-                if(gp.ui.commandNum == 1) {
-                    // Logique pour les options
-                }
-                if(gp.ui.commandNum == 2) {
-                    System.exit(0); // Quitter le jeu
-                }
-            }
+            
+            
         }
+
         // Vérifier l'état du jeu avant de traiter les entrées
         if (gp.gameState == gp.playState){
             if(code == KeyEvent.VK_Q) {

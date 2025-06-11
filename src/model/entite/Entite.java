@@ -9,7 +9,7 @@ import java.awt.image.BufferedImage;
 * Création des classes entités
 */
 public abstract class Entite {
-    GamePanel gp;
+    public GamePanel gp;
     protected int vie;
     protected int vieMax;
     protected int force;
@@ -17,7 +17,7 @@ public abstract class Entite {
     public int Worldy;
     public int speed;
     public BufferedImage up1, up2, down1, down2, right1, right2, left1, left2;
-    public String direction;
+    public String direction= "down";
     public int SpriteCounter = 0;
     public int SpriteNum = 1;
     public Rectangle hitbox = new Rectangle(0, 0, 48, 48);
@@ -26,6 +26,13 @@ public abstract class Entite {
     public int actionLockCounter = 0;
     String dialogue[] = new String[20];
     int dialogueIndex = 0;
+    public String nom;
+    public BufferedImage image, image2, image3;
+    public boolean collision = false;
+
+    //Statut du joueur
+    public int maxLife;
+    public int life;
 
     public Entite(GamePanel gp){
         this.gp = gp;
@@ -88,7 +95,7 @@ public abstract class Entite {
     }
     public void draw(Graphics2D g2) {
 
-        BufferedImage image = null;
+        //BufferedImage image = null;
         int ScreenX = Worldx - gp.joueur.Worldx + gp.joueur.ScreenX;
         int ScreenY = Worldy - gp.joueur.Worldy + gp.joueur.ScreenY;
 
@@ -97,42 +104,42 @@ public abstract class Entite {
            Worldy + gp.TileSize > gp.joueur.Worldy - gp.joueur.ScreenY &&
            Worldy - gp.TileSize < gp.joueur.Worldy + gp.joueur.ScreenY) {
             switch (direction) {
-            case "up":
-                if( SpriteNum == 1){
-                    image = up1;
-                }
-                if( SpriteNum == 2){
-                    image = up2;
-                }
-                break;
-            case "down":
-                if( SpriteNum == 1){
-                    image = down1;
-                }
-                if( SpriteNum == 2){
-                    image = down2;
-                }
-                break;
-            case "left":
-                if( SpriteNum == 1){
-                    image = left1;
-                }
-                if ( SpriteNum == 2){
-                    image = left2;
-                }
-                break;
-            case "right":
-                if ( SpriteNum == 1){
-                    image = right1;
-                }
-                if ( SpriteNum == 2){
-                    image = right2;
-                }
-                break;
+                case "up":
+                    if( SpriteNum == 1){
+                        image = up1;
+                    }
+                    if( SpriteNum == 2){
+                        image = up2;
+                    }
+                    break;
+                case "down":
+                    if( SpriteNum == 1){
+                        image = down1;
+                    }
+                    if( SpriteNum == 2){
+                        image = down2;
+                    }
+                    break;
+                case "left":
+                    if( SpriteNum == 1){
+                        image = left1;
+                    }
+                    if ( SpriteNum == 2){
+                        image = left2;
+                    }
+                    break;
+                case "right":
+                    if ( SpriteNum == 1){
+                        image = right1;
+                    }
+                    if ( SpriteNum == 2){
+                        image = right2;
+                    }
+                    break;
+          }
+          
         }
-
-           g2.drawImage(image, ScreenX, ScreenY, gp.TileSize, gp.TileSize, null);
-        }
+        g2.drawImage(image, ScreenX, ScreenY, gp.TileSize, gp.TileSize, null);
     }   
 
     /*Entite(int vie, int force) {
