@@ -11,6 +11,28 @@ public class AssetChecker {
     }
     public void createItem() {    
 
+        try {
+            gp.item[0] = new model.item.Porte(gp);
+            gp.item[0].Worldx = 10 * gp.TileSize;
+            gp.item[0].Worldy = 12 * gp.TileSize;
+
+            gp.item[1] = new model.item.Clef(gp);
+            gp.item[1].Worldx = 9 * gp.TileSize;
+            gp.item[1].Worldy = 25 * gp.TileSize;
+
+            gp.item[2] = new model.item.Clef(gp);
+            gp.item[2].Worldx = 10 * gp.TileSize;
+            gp.item[2].Worldy = 9 * gp.TileSize;
+
+            gp.item[3] = new model.item.Porte(gp);
+            gp.item[3].Worldx = 12 * gp.TileSize;
+            gp.item[3].Worldy = 23 * gp.TileSize;
+
+            System.out.println("Items initialisés avec succès");
+        } catch (Exception e) {
+            System.out.println("Erreur lors de l'initialisation des items:");
+            e.printStackTrace();
+        }
     }
     public void setPNJ() {
         gp.pnj[0] = new PNJ(gp);

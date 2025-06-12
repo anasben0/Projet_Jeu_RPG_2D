@@ -156,6 +156,42 @@ public class KeyHandlerJoueur implements KeyListener {
                 gp.gameState = gp.playState; // Revenir au jeu
             }
         }
+        else if(gp.gameState == gp.gameOverState) {
+            if(code == KeyEvent.VK_Z || code == KeyEvent.VK_S) {
+                gp.ui.commandNum++;
+                if(gp.ui.commandNum > 1) {
+                    gp.ui.commandNum = 0; // Boucle entre les options
+                }
+            }
+            if(code == KeyEvent.VK_ENTER) {
+                if(gp.ui.commandNum == 0) {
+                    gp.gameState = gp.playState; // Reprendre le jeu
+                    gp.joueur.life = 3; // Réinitialiser la vie du joueur
+                }
+                else if(gp.ui.commandNum == 1) {
+                    System.exit(0); // Quitter le jeu
+                }
+                gp.ui.commandNum = 0; // Réinitialiser le numéro de commande
+            }
+        }
+        else if(gp.gameState == gp.winState) {
+            if(code == KeyEvent.VK_Z || code == KeyEvent.VK_S) {
+                gp.ui.commandNum++;
+                if(gp.ui.commandNum > 1) {
+                    gp.ui.commandNum = 0; // Boucle entre les options
+                }
+            }
+            if(code == KeyEvent.VK_ENTER) {
+                if(gp.ui.commandNum == 0) {
+                    gp.gameState = gp.playState; // Reprendre le jeu
+                    gp.joueur.life = 3; // Réinitialiser la vie du joueur
+                }
+                else if(gp.ui.commandNum == 1) {
+                    System.exit(0); // Quitter le jeu
+                }
+                gp.ui.commandNum = 0; // Réinitialiser le numéro de commande
+            }
+        }
     }
 
     @Override

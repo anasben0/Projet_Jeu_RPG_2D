@@ -27,11 +27,12 @@ public class Joueur extends Entite {
     private Armure armure;
     private Arme arme;
     public final int ScreenX, ScreenY;
+
     private CatalogueApparence catalogue;
     KeyHandlerJoueur KeyH;
     int standCounter = 0; // Compteur pour l'animation de marche
+    public int hasKey = 0; // Indique si le joueur a la clé (0 = non, 1 = oui)
 
-    //public int hasKey = 0; // Indique si le joueur a la clé (0 = non, 1 = oui)
 
     public Joueur (int vie, GamePanel gp, KeyHandlerJoueur KeyH) {
         super(gp);
@@ -57,7 +58,7 @@ public class Joueur extends Entite {
         //Worldx =gp.TileSize*23;
         //Worldy =gp.TileSize*21;
         Worldx =gp.TileSize*10;
-        Worldy =gp.TileSize*13;
+        Worldy =gp.TileSize*11;
         speed =4;
         direction = "down";
 
@@ -216,7 +217,22 @@ public class Joueur extends Entite {
     public void pickUpItem(int index) {
         // Ajoute l'item à l'inventaire du joueur
         if (index != 999) {
-            
+            String itemName = gp.item[index].nom;
+
+            switch(itemName){
+                case "Porte":
+                    if(hasKey > 0){
+                        gp.item[index] = null; // Supprime l'item de la liste
+                        hasKey--; // Le joueur utilise une clé
+                    } else {
+                        System.out.println("Vous n'avez pas la clé pour ouvrir cette porte.");
+                    }
+                    break;
+                case "Clef":
+                    gp.joueur.hasKey ++; // Le joueur a maintenant la clé
+                    gp.item[index] = null; // Supprime l'item de la liste
+                    break;
+            }
         }
     }
     public void interactWithPNJ(int index) {
@@ -314,14 +330,14 @@ public class Joueur extends Entite {
             if (cheveux != null) g2.drawImage(cheveux, tempScreenX, tempScreenY, gp.TileSize, gp.TileSize, null);
         }
 
-        /*
+        
         // Dessine l'attaque si le joueur est en train d'attaquer
         if (attack == attackup2 || attack == attackdown2) g2.drawImage(attack, tempScreenX, tempScreenY, gp.TileSize, gp.TileSize*2, null);
         if (attack == attackright2 || attack == attackleft2) g2.drawImage(attack, tempScreenX, tempScreenY, gp.TileSize*2, gp.TileSize, null);
         // on reset l'opacité à 1 pour les prochaines images
-        */ 
+        
 
-        if (attack == attackup2 || attack == attackdown2) {
+     /*   if (attack == attackup2 || attack == attackdown2) {
             g2.drawImage(corps, tempScreenX, tempScreenY, gp.TileSize, gp.TileSize*2, null);
             if (bas != null) g2.drawImage(bas, tempScreenX, tempScreenY, gp.TileSize, gp.TileSize*2, null);
             if (haut != null) g2.drawImage(haut, tempScreenX, tempScreenY, gp.TileSize, gp.TileSize*2, null);
@@ -334,7 +350,7 @@ public class Joueur extends Entite {
             if (haut != null) g2.drawImage(haut, tempScreenX, tempScreenY, gp.TileSize*2, gp.TileSize, null);
             if (cheveux != null) g2.drawImage(cheveux, tempScreenX, tempScreenY, gp.TileSize*2, gp.TileSize, null);
             g2.drawImage(épée, tempScreenX, tempScreenY, gp.TileSize*2, gp.TileSize, null);
-        }
+        } */
         g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
         
     }

@@ -332,6 +332,25 @@ public class UI {
         int x = getXforCenteredText(text);
         int y = gp.ScreenHeight / 2;
         g2.drawString(text, x, y);
+
+         // Recommencer
+        g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 35F));
+        text = "RECOMMENCER";
+        x = getXforCenteredText(text);
+        y += gp.TileSize * 4;
+        g2.drawString(text, x, y);
+        if(commandNum == 0) {
+            g2.drawString(">", x - gp.TileSize, y); // on dessine le curseur
+        }
+
+        // Retour à l'ecran d'accueil
+        text = "Quitter";
+        x = getXforCenteredText(text);
+        y += 70;
+        g2.drawString(text, x, y);
+        if(commandNum == 1) {
+            g2.drawString(">", x - gp.TileSize, y); // on dessine le curseur
+        }
     }
 
     public void gameOverScreen(Graphics2D g2){
@@ -342,8 +361,8 @@ public class UI {
         int x;
         int y;
         String text;
-        g2.setFont(g2.getFont().deriveFont(Font.BOLD,110));
-
+        g2.setFont(g2.getFont().deriveFont(Font.BOLD,100f));
+        //Main
         text = " GAME OVER";
         g2.setColor(Color.BLACK);
         x = getXforCenteredText(text);
@@ -352,6 +371,26 @@ public class UI {
 
         g2.setColor(Color.white);
         g2.drawString(text,x-4,y-4);
+
+        // Recommencer
+        g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 35F));
+        text = "RECOMMENCER";
+        x = getXforCenteredText(text);
+        y += gp.TileSize * 4;
+        g2.drawString(text, x, y);
+        if(commandNum == 0) {
+            g2.drawString(">", x - gp.TileSize, y); // on dessine le curseur
+        }
+
+        // Retour à l'ecran d'accueil
+        text = "Quitter";
+        x = getXforCenteredText(text);
+        y += 70;
+        g2.drawString(text, x, y);
+        if(commandNum == 1) {
+            g2.drawString(">", x - gp.TileSize, y); // on dessine le curseur
+        }
+
 
     }
     // on centre le texte dans l'écran
