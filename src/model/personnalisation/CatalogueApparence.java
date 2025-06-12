@@ -85,11 +85,6 @@ public class CatalogueApparence {
         return bas;
     }
 
-    public BufferedImage getEpee(String direction, int frame) {
-        String chemin = String.format("src/res/Assets/Armes/epee_%s_%d.png", direction, frame);
-        return chargerImage(chemin);
-    }
-
     public BufferedImage getCorps(String direction, int frame) {
         String chemin = String.format("src/res/Assets/Corps/corps_%s_%d.png", direction, frame);
         return chargerImage(chemin);
