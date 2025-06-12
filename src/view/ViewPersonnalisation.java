@@ -1,12 +1,10 @@
 package view;
 
-import model.entite.Joueur;
-import model.personnalisation.CatalogueApparence;
-
+import Test.GamePanel;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-
-import Test.GamePanel;
+import model.entite.Joueur;
+import model.personnalisation.CatalogueApparence;
 
 /**
  * Affiche l'écran de personnalisation du personnage.

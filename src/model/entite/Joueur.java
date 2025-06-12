@@ -9,8 +9,8 @@ import javax.imageio.ImageIO;
 import model.gameplay.Inventaire;
 import model.item.Arme;
 import model.item.Armure;
-import model.personnalisation.Personnalisation;
 import model.personnalisation.CatalogueApparence;
+import model.personnalisation.Personnalisation;
 
 /**
  * Classe Joueur qui hérite de la classe Entité.
@@ -144,6 +144,7 @@ public class Joueur extends Entite {
             // Logique d'interaction avec le PNJ
             if(gp.KeyH.enterPressed == true) {
                 gp.gameState = gp.dialogueState; // Change l'état du jeu pour afficher le dialogue
+                System.out.println("Interaction avec le PNJ : " + index);
                 gp.pnj[index].speak(); // Appelle la méthode speak du PNJ pour afficher son dialogue
             }
         }

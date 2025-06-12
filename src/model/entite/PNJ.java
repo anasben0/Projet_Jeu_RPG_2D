@@ -15,6 +15,7 @@ public class PNJ extends Entite {
 
         getImage();
         setDialogue();
+        System.out.println("PNJ created");
     }
     /**
      * Méthode pour afficher le PNJ

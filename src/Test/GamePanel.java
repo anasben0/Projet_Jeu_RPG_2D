@@ -4,14 +4,12 @@ import controller.ControllerPersonnalisation;
 import controller.EventHandler;
 import controller.KeyHandlerJoueur;
 import controller.MouseHandlerPersonnalisation;
-
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import javax.swing.JPanel;
 import model.entite.Entite;
 import model.entite.Joueur;
@@ -154,7 +152,7 @@ public void run() {
             ui.draw(g2);
         }
         //jeu en cours
-        else if (gameState == playState) {
+        else if (gameState == playState || gameState == pauseState || gameState == dialogueState) {
             //tiles
             tileM.draw(g2);
 

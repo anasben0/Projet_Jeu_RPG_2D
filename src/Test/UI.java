@@ -1,12 +1,12 @@
 package Test;
 
+import controller.ControllerPersonnalisation;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-
-import controller.ControllerPersonnalisation;
+import java.util.Collections;
 import model.entite.Entite;
 import model.item.Heart;
 import view.ViewPersonnalisation;
@@ -52,26 +52,73 @@ public class UI {
     public void draw(Graphics2D g2) {
         this.g2 = g2;
         g2.setFont(cambria_40);
-        g2.setColor(Color.WHITE);
 
-        //Titre
-        if(gp.gameState == gp.titleState){
+        // Remplir l'arrière-plan en noir seulement pour l'écran titre
+        if(gp.gameState == gp.titleState) {
+            g2.setColor(Color.BLACK);
+            g2.fillRect(0, 0, gp.ScreenWidth, gp.ScreenHeight);
             drawTitleScreen();
         }
-        //JEU
-        if(gp.gameState == gp.playState){
+        // Pour tous les autres états
+        else {
+            // Dessiner d'abord le jeu
+            drawGame();
+            
+            // Puis les éléments UI
             drawPlayerLife();
+            
+            if(messageOn) {
+                g2.setFont(g2.getFont().deriveFont(30F));
+                g2.drawString(message, gp.TileSize/2, gp.TileSize*5);
+                
+                messageCounter++;
+                if(messageCounter > 120) {
+                    messageCounter = 0;
+                    messageOn = false;
+                }
+            }
+            
+            // Dessiner les écrans spéciaux par-dessus
+            if(gp.gameState == gp.pauseState) {
+                drawPauseScreen();
+            }
+            if(gp.gameState == gp.dialogueState) {
+                drawDialogueScreen();
+            }
         }
-        // PAUSE
-        if(gp.gameState == gp.pauseState){
-            drawPauseScreen();
-            drawPlayerLife();
-        }
-        // PArler avec les npc
-        if(gp.gameState == gp.dialogueState){
-            drawDialogueScreen();
+    }
+
+    // Nouvelle méthode pour dessiner le jeu
+    private void drawGame() {
+        // Dessiner les tuiles
+        gp.tileM.draw(g2);
+
+        // Ajouter les entités à la liste
+        gp.entityList.add(gp.joueur);
+
+        for(int i = 0; i < gp.pnj.length; i++) {
+            if(gp.pnj[i] != null) {
+                gp.entityList.add(gp.pnj[i]);
+            }
         }
 
+        for(int i = 0; i < gp.item.length; i++) {
+            if(gp.item[i] != null) {
+                gp.entityList.add(gp.item[i]);
+            }
+        }
+
+        // Trier les entités par position Y
+        Collections.sort(gp.entityList, (e1, e2) -> 
+            Integer.compare(e1.Worldy, e2.Worldy));
+
+        // Dessiner toutes les entités
+        for(Entite entity : gp.entityList) {
+            entity.draw(g2);
+        }
+
+        // Vider la liste
+        gp.entityList.clear();
     }
 
     public void drawPlayerLife(){
