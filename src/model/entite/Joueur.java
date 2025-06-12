@@ -7,9 +7,6 @@ import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import javax.imageio.ImageIO;
-import model.gameplay.Inventaire;
-import model.item.Arme;
-import model.item.Armure;
 import model.personnalisation.CatalogueApparence;
 import model.personnalisation.Personnalisation;
 
@@ -23,9 +20,9 @@ public class Joueur extends Entite {
     private int indexHaut;
     private int indexBas;
     public BufferedImage corps; // image du corps de base
-    private Inventaire inventaire;
-    private Armure armure;
-    private Arme arme;
+    //private Inventaire inventaire;
+    //private Armure armure;
+    //private Arme arme;
     public final int ScreenX, ScreenY;
 
     private CatalogueApparence catalogue;
@@ -37,7 +34,7 @@ public class Joueur extends Entite {
     public Joueur (int vie, GamePanel gp, KeyHandlerJoueur KeyH) {
         super(gp);
         this.catalogue = new CatalogueApparence();
-        this.inventaire = new Inventaire();
+        //this.inventaire = new Inventaire();
         this.KeyH = KeyH;
         
         ScreenX = gp.ScreenWidth/2 - gp.TileSize/2;
@@ -362,30 +359,6 @@ public class Joueur extends Entite {
 
     public void setPersonnalisation(Personnalisation personnalisation) {
         this.personnalisation = personnalisation;
-    }
-
-    public Inventaire getInventaire() {
-        return inventaire;
-    }
-
-    public void setInventaire(Inventaire inventaire) {
-        this.inventaire = inventaire;
-    }
-
-    public Armure getArmure() {
-        return armure;
-    }
-
-    public void setArmure(Armure armure) {
-        this.armure = armure;
-    }
-
-    public Arme getArme() {
-        return arme;
-    }
-
-    public void setArme(Arme arme) {
-        this.arme = arme;
     }
 
     public int getIndexCheveux() {
