@@ -17,6 +17,9 @@ public class Monstre extends Entite {
         direction = "down";
         speed = 1;
         nom = "Green Slime";
+
+        maxLife = 3;
+        life = maxLife;
         
 
         hitbox.x = 3;

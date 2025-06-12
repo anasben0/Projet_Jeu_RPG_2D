@@ -45,6 +45,9 @@ public class Joueur extends Entite {
         hitbox = new Rectangle(8, 16, 32, 32); // hitbox du joueur
         solidAreaDefaultX = hitbox.x;
         solidAreaDefaultY = hitbox.y;
+
+        attackArea.width = 36;
+        attackArea.height = 36;
         
         SetDefaultValues();
         // getPlayerImage();
@@ -94,7 +97,11 @@ public class Joueur extends Entite {
 
     public void update (){
 
-        if (KeyH.UpPressed == true || KeyH.DownPressed == true ||
+        if ( attacking == true){
+            attacking();
+        }
+
+        else if (KeyH.UpPressed == true || KeyH.DownPressed == true ||
         KeyH.RightPressed == true || KeyH.LeftPressed == true ||
         KeyH.enterPressed == true) {
             if (KeyH.UpPressed == true){
@@ -164,6 +171,44 @@ public class Joueur extends Entite {
         
     }
 
+    public void attacking(){
+        SpriteCounter++;
+        if (SpriteCounter <= 5) {
+            SpriteNum = 1; // Premier sprite d'attaque
+        }
+        if (SpriteCounter > 5 && SpriteCounter <= 25) {
+            SpriteNum = 2; // Deuxième sprite d'attaque
+
+            int currentWorldX = Worldx;
+            int currentWorldY = Worldy;
+            int solidAreaWidth = hitbox.x;
+            int solidAreaHeight = hitbox.y;
+
+            switch(direction){
+            case "up" : Worldy -= attackArea.height; break;
+            case "down" : Worldy += attackArea.height; break;
+            case "left" : Worldx -= attackArea.width; break;
+            case "right" : Worldx -= attackArea.width; break;
+            }
+
+            hitbox.width = attackArea.width;
+            hitbox.height = attackArea.height;
+            //collision avec les monstres
+            int monsterIndex = gp.cChecker.checkEntite(this, gp.monstre);
+            damageMonster(monsterIndex);
+
+            Worldx = currentWorldX;
+            Worldy = currentWorldY;
+            hitbox.width = solidAreaWidth;
+            hitbox.height = solidAreaHeight;
+        }
+        if (SpriteCounter > 25) {
+            attacking = false; // Fin de l'attaque
+            SpriteNum = 1; // Réinitialise le sprite à la position de base
+            SpriteCounter = 0; // Réinitialise le compteur de sprite
+        }
+    }
+
     public void pickUpItem(int index) {
         // Ajoute l'item à l'inventaire du joueur
         if (index != 999) {
@@ -171,15 +216,19 @@ public class Joueur extends Entite {
         }
     }
     public void interactWithPNJ(int index) {
-        // Interagit avec le PNJ si le joueur est proche
-        if (index != 999) {
-            // Logique d'interaction avec le PNJ
-            if(gp.KeyH.enterPressed == true) {
+        if(gp.KeyH.enterPressed == true){
+
+            if (index != 999){
                 gp.gameState = gp.dialogueState; // Change l'état du jeu pour afficher le dialogue
-                System.out.println("Interaction avec le PNJ : " + index);
                 gp.pnj[index].speak(); // Appelle la méthode speak du PNJ pour afficher son dialogue
+
             }
+            else {
+                attacking = true; // Le joueur attaque
+            }
+
         }
+        
         
     }
 
@@ -197,26 +246,66 @@ public class Joueur extends Entite {
         }
     }
 
+    public void damageMonster(int index){
+
+        if( index != 999){
+
+            if(gp.monstre[index].invincible == false){
+                gp.monstre[index].life -=1;
+                gp.monstre[index].invincible = true;
+
+                if(gp.monstre[index].life <= 0){
+                    gp.monstre[index] = null;
+                }
+            }
+        }
+    }
+
     
     public void draw(Graphics2D g2) {
         int x = ScreenX;
         int y = ScreenY;
         int frame = SpriteNum; // 1 ou 2
+        BufferedImage attack = null;
+        int tempScreenX = ScreenX;
+        int tempScreenY = ScreenY;
 
         BufferedImage bas = catalogue.getBas(indexBas, direction, frame);
         BufferedImage haut = catalogue.getHaut(indexHaut, direction, frame);
         BufferedImage cheveux = catalogue.getCheveux(indexCheveux, direction, frame);
         BufferedImage corps = catalogue.getCorps(direction, frame);
 
+        // Si le joueur est en train d'attaquer, on utilise les images d'attaque
+        if (attacking) {
+            switch (direction) {
+                case "up":
+                    tempScreenY = ScreenX - gp.TileSize;
+                    attack = attackup2;
+                    break;
+                case "down":
+                    attack = attackdown2;
+                    break;
+                case "left":
+                    tempScreenX = ScreenX - gp.TileSize;
+                    attack = attackleft2;
+                    break;
+                case "right":
+                    attack = attackright2;
+                    break;
+            }
+        }
+
         // On change l'opacité si le joueur est invincible
         if (invincible){
             g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
         }
         // Dessine le joueur avec les images de personnalisation
-        g2.drawImage(corps, x, y, gp.TileSize, gp.TileSize, null);
-        if (bas != null) g2.drawImage(bas, x, y, gp.TileSize, gp.TileSize, null);
-        if (haut != null) g2.drawImage(haut, x, y, gp.TileSize, gp.TileSize, null);
-        if (cheveux != null) g2.drawImage(cheveux, x, y, gp.TileSize, gp.TileSize, null);
+        g2.drawImage(corps, tempScreenX, tempScreenY, gp.TileSize, gp.TileSize, null);
+        if (bas != null) g2.drawImage(bas, tempScreenX, tempScreenY, gp.TileSize, gp.TileSize, null);
+        if (haut != null) g2.drawImage(haut, tempScreenX, tempScreenY, gp.TileSize, gp.TileSize, null);
+        if (cheveux != null) g2.drawImage(cheveux, tempScreenX, tempScreenY, gp.TileSize, gp.TileSize, null);
+        if (attack == attackup2 || attack == attackdown2) g2.drawImage(attack, tempScreenX, tempScreenY, gp.TileSize, gp.TileSize*2, null);
+        if (attack == attackright2 || attack == attackleft2) g2.drawImage(attack, tempScreenX, tempScreenY, gp.TileSize*2, gp.TileSize, null);
         // on reset l'opacité à 1 pour les prochaines images
         g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
         

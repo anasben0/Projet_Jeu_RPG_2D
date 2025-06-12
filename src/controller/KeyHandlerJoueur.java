@@ -108,7 +108,7 @@ public class KeyHandlerJoueur implements KeyListener {
         }
 
         // Vérifier l'état du jeu avant de traiter les entrées
-        if (gp.gameState == gp.playState){
+        else if (gp.gameState == gp.playState){
             if(code == KeyEvent.VK_Q) {
                 LeftPressed = true;
             }

@@ -1,6 +1,7 @@
 package model.entite;
 
 import Test.GamePanel;
+import java.awt.AlphaComposite;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
@@ -22,10 +23,12 @@ public abstract class Entite {
     public int SpriteCounter = 0;
     public int SpriteNum = 1;
     public Rectangle hitbox = new Rectangle(0, 0, 48, 48);
+    public Rectangle attackArea = new Rectangle(0,0,0,0);
     public int solidAreaDefaultX, solidAreaDefaultY;
     public boolean collisionOn = false;
     public int actionLockCounter = 0;
     public boolean invincible = false;
+    public boolean attacking = false;
     public int invincibleCounter = 0;
     String dialogue[] = new String[20];
     int dialogueIndex = 0;
@@ -87,24 +90,32 @@ public abstract class Entite {
 
         if(collisionOn==false){
                 // Si pas de collision, on met à jour la position du joueur
-                switch (direction) {
-                    case "up": Worldy -= speed; break;
-                    case "down": Worldy += speed; break;
-                    case "left": Worldx -= speed; break;
-                    case "right": Worldx += speed; break;
-                }
+            switch (direction) {
+                case "up": Worldy -= speed; break;
+                case "down": Worldy += speed; break;
+                case "left": Worldx -= speed; break;
+                case "right": Worldx += speed; break;
             }
+        }
 
-            SpriteCounter ++;
-            if (SpriteCounter > 10){
-                if(SpriteNum == 1){
-                    SpriteNum = 2;
-                }
-                else if ( SpriteNum == 2){
-                    SpriteNum = 1;
-                }
-                SpriteCounter=0;
+        SpriteCounter ++;
+        if (SpriteCounter > 10){
+            if(SpriteNum == 1){
+                SpriteNum = 2;
             }
+            else if ( SpriteNum == 2){
+                SpriteNum = 1;
+            }
+            SpriteCounter=0;
+        }
+
+        if(invincible == true){
+            invincibleCounter++;
+            if(invincibleCounter > 30) { // 60 frames d'invincibilité
+                invincible = false;
+                invincibleCounter = 0; // Réinitialise le compteur d'invincibilité
+            }
+        }
 
 
     }
@@ -129,9 +140,15 @@ public abstract class Entite {
                 case "right": imageToDraw = (SpriteNum == 1) ? right1 : right2; break;
             }
 
+            if (invincible){
+                g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.6f));
+            }
+
             if (imageToDraw != null) {
                 g2.drawImage(imageToDraw, screenX, screenY, gp.TileSize, gp.TileSize, null);
             }
+            g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
+
         }
     }   
 
