@@ -295,7 +295,7 @@ public class Joueur extends Entite {
         BufferedImage haut = catalogue.getHaut(indexHaut +1, direction, frame);
         BufferedImage cheveux = catalogue.getCheveux(indexCheveux +1, direction, frame);
         BufferedImage corps = catalogue.getCorps(direction, frame);
-        BufferedImage épée = catalogue.getEpee(direction, frame);
+        //BufferedImage épée = catalogue.getEpee(direction, frame);
 
         // Si le joueur est en train d'attaquer, on utilise les images d'attaque
         if (attacking) {
