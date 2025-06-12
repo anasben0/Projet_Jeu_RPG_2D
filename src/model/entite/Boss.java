@@ -6,8 +6,10 @@ public class Boss extends Monstre {
     private String nom;
     private int difficulté;
 
-    public Boss(int vie, int force, GamePanel gp) {
-        super(vie, force, "Boss", gp);
+    public Boss(GamePanel gp) {
+        super(gp);
+        nom = "Boss";
+        difficulté = 5;
     }
-    
+
 }

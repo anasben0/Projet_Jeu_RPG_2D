@@ -110,6 +110,12 @@ public class UI {
             }
         }
 
+        for(int i = 0; i < gp.monstre.length; i++) {
+            if(gp.monstre[i] != null) {
+                gp.entityList.add(gp.monstre[i]);
+            }
+        }
+
         // Trier les entités par position Y
         Collections.sort(gp.entityList, (e1, e2) -> 
             Integer.compare(e1.Worldy, e2.Worldy));

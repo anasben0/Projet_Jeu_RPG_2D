@@ -1,6 +1,7 @@
 package model.entite;
 import Test.GamePanel;
 import controller.KeyHandlerJoueur;
+import java.awt.AlphaComposite;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
@@ -47,10 +48,13 @@ public class Joueur extends Entite {
         
         SetDefaultValues();
         // getPlayerImage();
+        getJoueurAttaqueImage();
     }
     public void SetDefaultValues(){
-        Worldx =gp.TileSize*23;
-        Worldy =gp.TileSize*21;
+        //Worldx =gp.TileSize*23;
+        //Worldy =gp.TileSize*21;
+        Worldx =gp.TileSize*10;
+        Worldy =gp.TileSize*13;
         speed =4;
         direction = "down";
 
@@ -73,11 +77,26 @@ public class Joueur extends Entite {
             e.printStackTrace();
         }
     }
+    public void getJoueurAttaqueImage(){
+        try{
+            attackup1 = ImageIO.read(getClass().getResourceAsStream("/res/Assets/Attaque/boy_attack_up_1.png"));
+            attackup2 = ImageIO.read(getClass().getResourceAsStream("/res/Assets/Attaque/boy_attack_up_2.png"));
+            attackdown1 = ImageIO.read(getClass().getResourceAsStream("/res/Assets/Attaque/boy_attack_down_1.png"));
+            attackdown2 = ImageIO.read(getClass().getResourceAsStream("/res/Assets/Attaque/boy_attack_down_2.png"));
+            attackright1 = ImageIO.read(getClass().getResourceAsStream("/res/Assets/Attaque/boy_attack_right_1.png"));
+            attackright2 = ImageIO.read(getClass().getResourceAsStream("/res/Assets/Attaque/boy_attack_right_2.png"));
+            attackleft1 = ImageIO.read(getClass().getResourceAsStream("/res/Assets/Attaque/boy_attack_left_1.png"));
+            attackleft2 = ImageIO.read(getClass().getResourceAsStream("/res/Assets/Attaque/boy_attack_left_2.png"));
+        }catch(IOException e){
+            e.printStackTrace();
+        }
+    }
 
     public void update (){
 
         if (KeyH.UpPressed == true || KeyH.DownPressed == true ||
-        KeyH.RightPressed == true || KeyH.LeftPressed == true){
+        KeyH.RightPressed == true || KeyH.LeftPressed == true ||
+        KeyH.enterPressed == true) {
             if (KeyH.UpPressed == true){
                 direction ="up";
             }
@@ -105,9 +124,13 @@ public class Joueur extends Entite {
             // verification des collisions avec les events
             gp.eHandler.checkEvent();
 
-            gp.KeyH.enterPressed = false; // Réinitialise la touche entrée
+            // Vérification des collisions avec les monstres
+            int monstreIndex = gp.cChecker.checkEntite(this, gp.monstre);
+            contactMonstre(monstreIndex);
 
-            if(collisionOn==false){
+            
+
+            if(collisionOn==false && KeyH.enterPressed == false){
                 // Si pas de collision, on met à jour la position du joueur
                 switch (direction) {
                     case "up": Worldy -= speed; break;
@@ -116,6 +139,7 @@ public class Joueur extends Entite {
                     case "right": Worldx += speed; break;
                 }
             }
+            gp.KeyH.enterPressed = false; // Réinitialise la touche entrée
 
             SpriteCounter ++;
             if (SpriteCounter > 10){
@@ -128,6 +152,14 @@ public class Joueur extends Entite {
                 SpriteCounter=0;
             }
             
+        }
+
+        if(invincible == true){
+            invincibleCounter++;
+            if(invincibleCounter > 60) { // 60 frames d'invincibilité
+                invincible = false;
+                invincibleCounter = 0; // Réinitialise le compteur d'invincibilité
+            }
         }
         
     }
@@ -151,6 +183,20 @@ public class Joueur extends Entite {
         
     }
 
+    public void contactMonstre(int index) {
+        // Gère le contact avec les monstres
+        if (index != 999) {
+            if (!invincible) {
+                life -= 1; // Réduit la vie du joueur de 1
+                invincible = true;
+            }
+            if (life <= 0) {
+                System.out.println("Le joueur est mort !");
+                // Logique de mort du joueur
+            }
+        }
+    }
+
     
     public void draw(Graphics2D g2) {
         int x = ScreenX;
@@ -162,13 +208,18 @@ public class Joueur extends Entite {
         BufferedImage cheveux = catalogue.getCheveux(indexCheveux, direction, frame);
         BufferedImage corps = catalogue.getCorps(direction, frame);
 
-
+        // On change l'opacité si le joueur est invincible
+        if (invincible){
+            g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
+        }
         // Dessine le joueur avec les images de personnalisation
         g2.drawImage(corps, x, y, gp.TileSize, gp.TileSize, null);
         if (bas != null) g2.drawImage(bas, x, y, gp.TileSize, gp.TileSize, null);
         if (haut != null) g2.drawImage(haut, x, y, gp.TileSize, gp.TileSize, null);
         if (cheveux != null) g2.drawImage(cheveux, x, y, gp.TileSize, gp.TileSize, null);
-
+        // on reset l'opacité à 1 pour les prochaines images
+        g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
+        
     }
 
     // Getters and Setters

@@ -8,6 +8,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import javax.swing.JPanel;
@@ -59,6 +61,7 @@ public class GamePanel extends JPanel implements Runnable{
     public Joueur joueur = new Joueur(10,this,KeyH);
     public Entite item[]= new Entite[10];
     public Entite pnj[] = new Entite[10];
+    public Entite monstre[] = new Entite[10];
     ArrayList<Entite> entityList = new ArrayList<>();
     // Game state
     public int gameState;
@@ -76,11 +79,25 @@ public class GamePanel extends JPanel implements Runnable{
         this.addKeyListener(KeyH);
         this.addMouseListener(new MouseHandlerPersonnalisation(this));
         this.setFocusable(true);
+        
+        // Vérification des ressources
+        try {
+            InputStream is = getClass().getResourceAsStream("/res/Monstre/greenslime_down_1.png");
+            if (is == null) {
+                System.out.println("ERREUR: Impossible de trouver les ressources du monstre");
+            } else {
+                is.close();
+                System.out.println("Ressources du monstre trouvées avec succès");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     // Méthode pour configurer le jeu
     public void setUpGame () {
         aChecker.createItem();
+        aChecker.setMonstre();
         aChecker.setPNJ();
         playMusic(4); // on démarre la musique de fond
         gameState = titleState; // on démarre le jeu en mode "title"
@@ -129,6 +146,11 @@ public void run() {
                     pnj[i].update();
                 }
             }
+            for (int i = 0; i < monstre.length; i++) {
+                if(monstre[i] != null) {
+                    monstre[i].update();
+                }
+            }
         }
         if(gameState == pauseState) {
             // on ne fait rien, le jeu est en pause
@@ -153,21 +175,21 @@ public void run() {
         }
         //jeu en cours
         else if (gameState == playState || gameState == pauseState || gameState == dialogueState) {
-            //tiles
             tileM.draw(g2);
 
-            // on ajoute les entités
             entityList.add(joueur);
 
+            // Ajout des PNJ
             for (int i = 0; i < pnj.length; i++) {
                 if (pnj[i] != null) {
                     entityList.add(pnj[i]);
                 }
             }
 
-            for (int i = 0; i < item.length; i++) {
-                if (item[i] != null) {
-                    entityList.add(item[i]);
+            // Ajout des monstres
+            for (int i = 0; i < monstre.length; i++) {
+                if (monstre[i] != null) {
+                    entityList.add(monstre[i]);
                 }
             }
 
@@ -180,7 +202,12 @@ public void run() {
             entityList.clear();
 
             ui.draw(g2);
+            //ui.drawPlayerLife(); // Dessiner la barre de vie
+            //if (gameState == dialogueState) {
+              //  ui.drawDialogueScreen(); // Dessiner les dialogues si nécessaire
+            //}
         }
+
         else if (gameState == personnalisationState) {
             if (ui.viewPersonnalisation != null) {
                 ui.viewPersonnalisation.draw(g2);

@@ -17,6 +17,7 @@ public abstract class Entite {
     public int Worldy;
     public int speed;
     public BufferedImage up1, up2, down1, down2, right1, right2, left1, left2;
+    public BufferedImage attackup1, attackup2, attackdown1, attackdown2, attackright1, attackright2, attackleft1, attackleft2;
     public String direction= "down";
     public int SpriteCounter = 0;
     public int SpriteNum = 1;
@@ -24,11 +25,14 @@ public abstract class Entite {
     public int solidAreaDefaultX, solidAreaDefaultY;
     public boolean collisionOn = false;
     public int actionLockCounter = 0;
+    public boolean invincible = false;
+    public int invincibleCounter = 0;
     String dialogue[] = new String[20];
     int dialogueIndex = 0;
     public String nom;
     public BufferedImage image, image2, image3;
     public boolean collision = false;
+    public int type ; // 0 = joueur, 1 = PNJ, 2 = monstre, 3 = objet, 4 = portail
 
     //Statut du joueur
     public int maxLife;
@@ -70,6 +74,17 @@ public abstract class Entite {
         gp.cChecker.CheckTile(this); // Vérification des collisions avec les tuiles
         gp.cChecker.CheckObject(this, false); // Vérification des collisions avec les objets
         gp.cChecker.checkJoueur(this); // Vérification des collisions avec le joueur
+        gp.cChecker.checkEntite(this, gp.monstre); // Vérification des collisions avec les monstres
+        gp.cChecker.checkEntite(this, gp.pnj);
+        boolean contactJoueur = gp.cChecker.checkJoueur(this);
+
+        if(this.type == 2 && contactJoueur){
+            if(gp.joueur.invincible == false){
+                gp.joueur.life -= 1; // Réduit la vie du joueur de 1
+                gp.joueur.invincible = true;
+            }
+        }
+
         if(collisionOn==false){
                 // Si pas de collision, on met à jour la position du joueur
                 switch (direction) {
@@ -94,52 +109,30 @@ public abstract class Entite {
 
     }
     public void draw(Graphics2D g2) {
+        int screenX = Worldx - gp.joueur.Worldx + gp.joueur.ScreenX;
+        int screenY = Worldy - gp.joueur.Worldy + gp.joueur.ScreenY;
 
-        //BufferedImage image = null;
-        int ScreenX = Worldx - gp.joueur.Worldx + gp.joueur.ScreenX;
-        int ScreenY = Worldy - gp.joueur.Worldy + gp.joueur.ScreenY;
+        boolean isVisible = 
+            Worldx + gp.TileSize > gp.joueur.Worldx - gp.joueur.ScreenX &&
+            Worldx - gp.TileSize < gp.joueur.Worldx + gp.joueur.ScreenX &&
+            Worldy + gp.TileSize > gp.joueur.Worldy - gp.joueur.ScreenY &&
+            Worldy - gp.TileSize < gp.joueur.Worldy + gp.joueur.ScreenY;
 
-        if(Worldx + gp.TileSize > gp.joueur.Worldx - gp.joueur.ScreenX &&
-           Worldx - gp.TileSize < gp.joueur.Worldx + gp.joueur.ScreenX &&
-           Worldy + gp.TileSize > gp.joueur.Worldy - gp.joueur.ScreenY &&
-           Worldy - gp.TileSize < gp.joueur.Worldy + gp.joueur.ScreenY) {
-            switch (direction) {
-                case "up":
-                    if( SpriteNum == 1){
-                        image = up1;
-                    }
-                    if( SpriteNum == 2){
-                        image = up2;
-                    }
-                    break;
-                case "down":
-                    if( SpriteNum == 1){
-                        image = down1;
-                    }
-                    if( SpriteNum == 2){
-                        image = down2;
-                    }
-                    break;
-                case "left":
-                    if( SpriteNum == 1){
-                        image = left1;
-                    }
-                    if ( SpriteNum == 2){
-                        image = left2;
-                    }
-                    break;
-                case "right":
-                    if ( SpriteNum == 1){
-                        image = right1;
-                    }
-                    if ( SpriteNum == 2){
-                        image = right2;
-                    }
-                    break;
-          }
-          
+        if(isVisible) {
+            BufferedImage imageToDraw = null;
+            
+            // Sélection de l'image selon la direction et le sprite
+            switch(direction) {
+                case "up":    imageToDraw = (SpriteNum == 1) ? up1 : up2; break;
+                case "down":  imageToDraw = (SpriteNum == 1) ? down1 : down2; break;
+                case "left":  imageToDraw = (SpriteNum == 1) ? left1 : left2; break;
+                case "right": imageToDraw = (SpriteNum == 1) ? right1 : right2; break;
+            }
+
+            if (imageToDraw != null) {
+                g2.drawImage(imageToDraw, screenX, screenY, gp.TileSize, gp.TileSize, null);
+            }
         }
-        g2.drawImage(image, ScreenX, ScreenY, gp.TileSize, gp.TileSize, null);
     }   
 
     /*Entite(int vie, int force) {
