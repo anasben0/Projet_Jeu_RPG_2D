@@ -9,6 +9,7 @@ import java.awt.image.BufferedImage;
 import java.util.Collections;
 import model.entite.Entite;
 import model.item.Heart;
+import model.personnalisation.CatalogueApparence;
 import view.ViewPersonnalisation;
 
 
@@ -27,6 +28,7 @@ public class UI {
     public int titleScreenState = 0; // pour l'état de l'écran de titre
     public ViewPersonnalisation viewPersonnalisation;
     public ControllerPersonnalisation controllerPersonnalisation;
+    public CatalogueApparence catalogueApparence = new CatalogueApparence(); // pour la personnalisation du personnage
 
     // Constructeur de la classe UI
     public UI(GamePanel gp) {
@@ -176,10 +178,13 @@ public class UI {
             // SHADOW
             g2.setColor(Color.WHITE);
             g2.drawString(text, x , y );
+
             // on dessine le personnage principal
+            BufferedImage corps = catalogueApparence.getCorps("down", 1);
             x = gp.ScreenWidth / 2  - (gp.TileSize*2 )/ 2;
             y += gp.TileSize * 2;
-            g2.drawImage(gp.joueur.down1, x, y-20, gp.TileSize*2, gp.TileSize*2, null);
+            g2.drawImage(corps, x, y, gp.TileSize * 2, gp.TileSize * 2, null);
+
             // MENU
             g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 40F));
             // Nouvelle partie
