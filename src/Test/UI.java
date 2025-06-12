@@ -84,8 +84,12 @@ public class UI {
             if(gp.gameState == gp.pauseState) {
                 drawPauseScreen();
             }
+
             if(gp.gameState == gp.dialogueState) {
                 drawDialogueScreen();
+            }
+            if(gp.gameState == gp.gameOverState || gp.gameState == gp.winState) {
+                return;
             }
         }
     }
@@ -186,7 +190,7 @@ public class UI {
             g2.drawString(text, x , y );
 
             // on dessine le personnage principal
-            BufferedImage corps = catalogueApparence.getCorps("down", 1);
+            BufferedImage corps = catalogueApparence.getCorps("base", 1);
             x = gp.ScreenWidth / 2  - (gp.TileSize*2 )/ 2;
             y += gp.TileSize * 2;
             g2.drawImage(corps, x, y, gp.TileSize * 2, gp.TileSize * 2, null);
@@ -309,6 +313,45 @@ public class UI {
         g2.setColor(c);
         g2.setStroke(new BasicStroke(5));
         g2.drawRoundRect(x+5, y+5, width-10, height-10, 25, 25);
+
+    }
+
+    public void drawWinState(Graphics2D g2) {
+        this.g2 =g2;
+        if (g2 == null) {
+            System.out.println("ERREUR : Graphics2D non initialisé !");
+            return;
+        }
+
+        g2.setColor(Color.BLACK);
+        g2.fillRect(0, 0, gp.ScreenWidth, gp.ScreenHeight);
+
+        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 50F));
+        g2.setColor(Color.WHITE);
+        String text = "Vous avez Gagné !";
+        int x = getXforCenteredText(text);
+        int y = gp.ScreenHeight / 2;
+        g2.drawString(text, x, y);
+    }
+
+    public void gameOverScreen(Graphics2D g2){
+        this.g2 = g2;
+        g2.setColor(new Color(0,0,0,150));
+        g2.fillRect(0,0,gp.ScreenWidth, gp.ScreenHeight);
+
+        int x;
+        int y;
+        String text;
+        g2.setFont(g2.getFont().deriveFont(Font.BOLD,110));
+
+        text = " GAME OVER";
+        g2.setColor(Color.BLACK);
+        x = getXforCenteredText(text);
+        y = gp.TileSize * 4;
+        g2.drawString(text,x,y);
+
+        g2.setColor(Color.white);
+        g2.drawString(text,x-4,y-4);
 
     }
     // on centre le texte dans l'écran

@@ -29,7 +29,10 @@ public abstract class Entite {
     public int actionLockCounter = 0;
     public boolean invincible = false;
     public boolean attacking = false;
+    public boolean alive = true;
+    public boolean dying = false;
     public int invincibleCounter = 0;
+    public int dyingCounter = 0;
     String dialogue[] = new String[20];
     int dialogueIndex = 0;
     public String nom;
@@ -143,6 +146,9 @@ public abstract class Entite {
             if (invincible){
                 g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.6f));
             }
+            if(dying == true){
+                dyingAnimation(g2);
+            }
 
             if (imageToDraw != null) {
                 g2.drawImage(imageToDraw, screenX, screenY, gp.TileSize, gp.TileSize, null);
@@ -150,7 +156,44 @@ public abstract class Entite {
             g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
 
         }
-    }   
+    }
+    
+    public void dyingAnimation(Graphics2D g2){
+        dyingCounter++;
+
+        if(dyingCounter <= 5){
+            changeAlpha(g2, 0f);
+        }
+        if(dyingCounter > 5 && dyingCounter <=10){
+            changeAlpha(g2, 1f);
+        }
+        if(dyingCounter > 10 && dyingCounter <=15){
+            changeAlpha(g2, 0f);
+        }
+        if(dyingCounter > 15 && dyingCounter <=20){
+            changeAlpha(g2, 1f);
+        }
+        if(dyingCounter > 20 && dyingCounter <=25){
+            changeAlpha(g2, 0f);
+        }
+        if(dyingCounter > 25 && dyingCounter <=30){
+            changeAlpha(g2, 1f);
+        }
+        if(dyingCounter > 30 && dyingCounter <=35){
+            changeAlpha(g2, 0f);
+        }
+        if(dyingCounter > 35 && dyingCounter <=40){
+            changeAlpha(g2, 1f);
+        }
+        if(dyingCounter > 40){
+            dying = false;
+            alive = false;
+        }
+    }
+
+    public void changeAlpha(Graphics2D g2,float alphavalue){
+        g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alphavalue));
+    }
 
     /*Entite(int vie, int force) {
         this.vie = vie;

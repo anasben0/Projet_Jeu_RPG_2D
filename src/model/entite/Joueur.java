@@ -168,6 +168,10 @@ public class Joueur extends Entite {
                 invincibleCounter = 0; // Réinitialise le compteur d'invincibilité
             }
         }
+
+        if(life <= 0){
+            gp.gameState = gp.gameOverState;
+        }
         
     }
 
@@ -188,7 +192,7 @@ public class Joueur extends Entite {
             case "up" : Worldy -= attackArea.height; break;
             case "down" : Worldy += attackArea.height; break;
             case "left" : Worldx -= attackArea.width; break;
-            case "right" : Worldx -= attackArea.width; break;
+            case "right" : Worldx += attackArea.width; break;
             }
 
             hitbox.width = attackArea.width;
@@ -255,7 +259,8 @@ public class Joueur extends Entite {
                 gp.monstre[index].invincible = true;
 
                 if(gp.monstre[index].life <= 0){
-                    gp.monstre[index] = null;
+                    //gp.monstre[index] = null;
+                    gp.monstre[index].dying = true;
                 }
             }
         }
@@ -270,9 +275,9 @@ public class Joueur extends Entite {
         int tempScreenX = ScreenX;
         int tempScreenY = ScreenY;
 
-        BufferedImage bas = catalogue.getBas(indexBas, direction, frame);
-        BufferedImage haut = catalogue.getHaut(indexHaut, direction, frame);
-        BufferedImage cheveux = catalogue.getCheveux(indexCheveux, direction, frame);
+        BufferedImage bas = catalogue.getBas(indexBas +1, direction, frame);
+        BufferedImage haut = catalogue.getHaut(indexHaut +1, direction, frame);
+        BufferedImage cheveux = catalogue.getCheveux(indexCheveux +1, direction, frame);
         BufferedImage corps = catalogue.getCorps(direction, frame);
 
         // Si le joueur est en train d'attaquer, on utilise les images d'attaque
