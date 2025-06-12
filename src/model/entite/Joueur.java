@@ -10,6 +10,7 @@ import model.gameplay.Inventaire;
 import model.item.Arme;
 import model.item.Armure;
 import model.personnalisation.Personnalisation;
+import model.personnalisation.CatalogueApparence;
 
 /**
  * Classe Joueur qui hérite de la classe Entité.
@@ -17,10 +18,15 @@ import model.personnalisation.Personnalisation;
  */
 public class Joueur extends Entite {
     private Personnalisation personnalisation;
+    private int indexCheveux;
+    private int indexHaut;
+    private int indexBas;
+    public BufferedImage corps; // image du corps de base
     private Inventaire inventaire;
     private Armure armure;
     private Arme arme;
     public final int ScreenX, ScreenY;
+    private CatalogueApparence catalogue;
     KeyHandlerJoueur KeyH;
     int standCounter = 0; // Compteur pour l'animation de marche
 
@@ -28,6 +34,7 @@ public class Joueur extends Entite {
 
     public Joueur (int vie, GamePanel gp, KeyHandlerJoueur KeyH) {
         super(gp);
+        this.catalogue = new CatalogueApparence();
         this.inventaire = new Inventaire();
         this.KeyH = KeyH;
         
@@ -39,7 +46,7 @@ public class Joueur extends Entite {
         solidAreaDefaultY = hitbox.y;
         
         SetDefaultValues();
-        getPlayerImage();
+        // getPlayerImage();
     }
     public void SetDefaultValues(){
         Worldx =gp.TileSize*23;
@@ -142,47 +149,27 @@ public class Joueur extends Entite {
         }
         
     }
-    public void draw(Graphics2D g2){
-        BufferedImage image = null;
 
-        switch (direction) {
-            case "up":
-                if( SpriteNum == 1){
-                    image = up1;
-                }
-                if( SpriteNum == 2){
-                    image = up2;
-                }
-                break;
-            case "down":
-                if( SpriteNum == 1){
-                    image = down1;
-                }
-                if( SpriteNum == 2){
-                    image = down2;
-                }
-                break;
-            case "left":
-                if( SpriteNum == 1){
-                    image = left1;
-                }
-                if ( SpriteNum == 2){
-                    image = left2;
-                }
-                break;
-            case "right":
-                if ( SpriteNum == 1){
-                    image = right1;
-                }
-                if ( SpriteNum == 2){
-                    image = right2;
-                }
-                break;
-        }
+    
+    public void draw(Graphics2D g2) {
+        int x = ScreenX;
+        int y = ScreenY;
+        int frame = SpriteNum; // 1 ou 2
 
-        g2.drawImage(image, ScreenX, ScreenY, gp.TileSize, gp.TileSize, null);
+        BufferedImage bas = catalogue.getBas(indexBas, direction, frame);
+        BufferedImage haut = catalogue.getHaut(indexHaut, direction, frame);
+        BufferedImage cheveux = catalogue.getCheveux(indexCheveux, direction, frame);
+        BufferedImage corps = catalogue.getCorps(direction, frame);
+
+
+        // Dessine le joueur avec les images de personnalisation
+        g2.drawImage(corps, x, y, gp.TileSize, gp.TileSize, null);
+        if (bas != null) g2.drawImage(bas, x, y, gp.TileSize, gp.TileSize, null);
+        if (haut != null) g2.drawImage(haut, x, y, gp.TileSize, gp.TileSize, null);
+        if (cheveux != null) g2.drawImage(cheveux, x, y, gp.TileSize, gp.TileSize, null);
 
     }
+
     // Getters and Setters
     public Personnalisation getPersonnalisation() {
         return personnalisation;
@@ -214,6 +201,34 @@ public class Joueur extends Entite {
 
     public void setArme(Arme arme) {
         this.arme = arme;
+    }
+
+    public int getIndexCheveux() {
+        return indexCheveux;
+    }
+
+    public void setIndexCheveux(int indexCheveux) {
+        this.indexCheveux = indexCheveux;
+    }
+
+    public int getIndexHaut() {
+        return indexHaut;
+    }
+
+    public void setIndexHaut(int indexHaut) {
+        this.indexHaut = indexHaut;
+    }
+
+    public int getIndexBas() {
+        return indexBas;
+    }
+
+    public void setIndexBas(int indexBas) {
+        this.indexBas = indexBas;
+    }
+
+    public CatalogueApparence getCatalogue() {
+        return catalogue;
     }
     
 }

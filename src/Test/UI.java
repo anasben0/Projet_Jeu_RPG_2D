@@ -5,10 +5,14 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+
+import controller.ControllerPersonnalisation;
 import model.entite.Entite;
 import model.item.Heart;
+import view.ViewPersonnalisation;
 
-// cette classe gère l'interface utilisateur du jeu
+
+// Cette classe gère l'interface utilisateur du jeu
 public class UI {
     GamePanel gp;
     Graphics2D g2;
@@ -21,28 +25,29 @@ public class UI {
     public String currentDialogue = "";
     public int commandNum = 0; // pour le menu de commande
     public int titleScreenState = 0; // pour l'état de l'écran de titre
-    
+    public ViewPersonnalisation viewPersonnalisation;
+    public ControllerPersonnalisation controllerPersonnalisation;
+
+    // Constructeur de la classe UI
     public UI(GamePanel gp) {
         this.gp = gp;
         cambria_40 = new Font("Cambria", Font.PLAIN, 40);
         cambria_80B = new Font("Cambria", Font.BOLD, 80);
         // on charge l'image de la clé
         //Clef clef = new Clef();
-        //keyImage = clef.image; 
+        //keyImage = clef.image;
 
         Entite heart = new Heart(gp);
         heart_full = heart.image;
         heart_half = heart.image2;
         heart_blank = heart.image3;
-
-
-
     }
 
     public void showMessage(String text) {
         message = text;
         messageOn = true;
     }
+    
     // on dessine l'interface utilisateur
     public void draw(Graphics2D g2) {
         this.g2 = g2;
@@ -167,7 +172,7 @@ public class UI {
                 g2.drawString(">", x - gp.TileSize, y); // on dessine le curseur
             }
         }
-        else if(titleScreenState == 1){
+        /** else if(titleScreenState == 1){
             // personnalisation du personnage
             g2.setColor(Color.WHITE);
             g2.setFont(g2.getFont().deriveFont(40f));
@@ -207,11 +212,10 @@ public class UI {
             g2.drawString(text, x, y);
             if (commandNum == 3){
                 g2.drawString(">", x - gp.TileSize, y);
-            }
-
-        }
+            } **/
     }
-    // on dessine l'écran de pause
+
+        // on dessine l'écran de pause
     public void drawPauseScreen() {
         String text = "PAUSE";
         g2.setFont(g2.getFont().deriveFont(Font.BOLD, 80F));

@@ -1,7 +1,10 @@
 package Test;
 
+import controller.ControllerPersonnalisation;
 import controller.EventHandler;
 import controller.KeyHandlerJoueur;
+import controller.MouseHandlerPersonnalisation;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -13,6 +16,7 @@ import javax.swing.JPanel;
 import model.entite.Entite;
 import model.entite.Joueur;
 import tile.TileManager;
+import view.ViewPersonnalisation;
 
 
 
@@ -64,28 +68,32 @@ public class GamePanel extends JPanel implements Runnable{
     public final int playState = 1;
     public final int pauseState = 2;
     public final int dialogueState = 3;
+    public final int personnalisationState = 4;
 
-
+    // Constructeur de la classe GamePanel
     public GamePanel () {
         this.setPreferredSize(new Dimension(ScreenWidth,ScreenHeight));
         this.setBackground(Color.BLACK);
         this.setDoubleBuffered(true);
         this.addKeyListener(KeyH);
+        this.addMouseListener(new MouseHandlerPersonnalisation(this));
         this.setFocusable(true);
     }
 
+    // Méthode pour configurer le jeu
     public void setUpGame () {
         aChecker.createItem();
         aChecker.setPNJ();
         playMusic(4); // on démarre la musique de fond
         gameState = titleState; // on démarre le jeu en mode "title"
+        ui.viewPersonnalisation = new ViewPersonnalisation(this, joueur, joueur.getCatalogue());
+        ui.controllerPersonnalisation = new ControllerPersonnalisation(this, joueur, joueur.getCatalogue(), ui.viewPersonnalisation);
     }
 
     public void startGameThread (){
         gameThread = new Thread(this);
         gameThread.start();
     }
-
 
 @Override
 public void run() {
@@ -112,6 +120,7 @@ public void run() {
         }
     }
 }
+    // ici on met à jour les éléments du jeu
     public void update (){
 
         if(gameState == playState) {
@@ -130,8 +139,7 @@ public void run() {
 
     // ici on dessine les elements du jeu
     public void paintComponent (Graphics g) {
-
-
+        
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
         
@@ -146,46 +154,39 @@ public void run() {
             ui.draw(g2);
         }
         //jeu en cours
-        else{
+        else if (gameState == playState) {
             //tiles
             tileM.draw(g2);
 
             // on ajoute les entités
             entityList.add(joueur);
-            
-            //PNJ
-            for(int i = 0; i<pnj.length;i++){
-                if(pnj[i] != null){
+
+            for (int i = 0; i < pnj.length; i++) {
+                if (pnj[i] != null) {
                     entityList.add(pnj[i]);
-
                 }
             }
 
-            for ( int i = 0; i< item.length;i++){
-                if(item[i] != null){
+            for (int i = 0; i < item.length; i++) {
+                if (item[i] != null) {
                     entityList.add(item[i]);
-
                 }
             }
-            // SORT
-            Collections.sort(entityList, new Comparator<Entite>() {
 
-                @Override
-                public int compare(Entite e1, Entite e2){
-                    int result = Integer.compare(e1.Worldy, e2.Worldy);
-                    return result;
-                }
-            });
+            Collections.sort(entityList, (e1, e2) -> Integer.compare(e1.Worldy, e2.Worldy));
 
-            // on dessine les entités
-            for(int i=0; i<entityList.size();i++){
-                entityList.get(i).draw(g2);
+            for (Entite e : entityList) {
+                e.draw(g2);
             }
-            // on debarasse
+
             entityList.clear();
 
-            // UI
             ui.draw(g2);
+        }
+        else if (gameState == personnalisationState) {
+            if (ui.viewPersonnalisation != null) {
+                ui.viewPersonnalisation.draw(g2);
+            }
         }
 
         //DEBUG

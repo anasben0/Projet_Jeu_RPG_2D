@@ -28,6 +28,7 @@ public class KeyHandlerJoueur implements KeyListener {
     public void keyPressed(KeyEvent e) {
 
         int code = e.getKeyCode();
+        System.out.println("Key pressed: " + code);
         // TITLE STATE
         if (gp.gameState == gp.titleState) {
             
@@ -46,20 +47,18 @@ public class KeyHandlerJoueur implements KeyListener {
                     }
                 }
                 if (code == KeyEvent.VK_ENTER) {
-                    if(gp.ui.commandNum == 0) {
-                        //gp.stopMusic();
-                        gp.ui.titleScreenState = 1; // Passe au menu de personnalisation
-                        gp.ui.commandNum = 0;
-                        //gp.repaint(); // Redessine l'écran
-                    }
-                    if(gp.ui.commandNum == 1) {
-                        // Logique pour les options
-                    }
-                    if(gp.ui.commandNum == 2) {
-                        System.exit(0); // Quitter le jeu
+                    switch(gp.ui.commandNum) {
+                        case 0: // NOUVELLE PARTIE
+                            gp.gameState = gp.personnalisationState; // aller directement à la personnalisation
+                            break;
+                        case 1: // CONTINUER
+                            gp.gameState = gp.playState;
+                            break;
+                        case 2: // QUITTER
+                            System.exit(0);
+                            break;
                     }
                 }
-
             }
             
             else if ( gp.ui.titleScreenState == 1){

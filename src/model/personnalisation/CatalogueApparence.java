@@ -1,41 +1,99 @@
 package model.personnalisation;
 
-import java.util.List;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import javax.imageio.ImageIO;
 
-// Mettre en place une liste de personnalisation disponible
 public class CatalogueApparence {
-    private List<String> chapeaux;
-    private List<String> hauts;
-    private List<String> bas;
-    private List<String> chaussures;
-    private List<String> couleursPeau;
 
-    public CatalogueApparence(List<String> chapeaux, List<String> hauts, List<String> bas, List<String> chaussures, List<String> couleursPeau) {
-        this.chapeaux = chapeaux;
-        this.hauts = hauts;
-        this.bas = bas;
-        this.chaussures = chaussures;
-        this.couleursPeau = couleursPeau;
+    private BufferedImage[] cheveux;
+    private BufferedImage[] haut;
+    private BufferedImage[] bas;
+
+    // Constructeur qui charge les apparences depuis les fichiers
+    public CatalogueApparence() {
+        cheveux = chargerApparences("res/Assets/Cheveux/");
+        haut = chargerApparences("res/Assets/Haut/");
+        bas = chargerApparences("res/Assets/Bas/");
     }
 
-    // Getters
-    public List<String> getChapeaux() {
-        return chapeaux;
+    /**
+     * Charge les images d'apparence depuis un dossier spécifique.
+     * @param chemin Le chemin du dossier contenant les images.
+     * @return Un tableau de BufferedImage contenant les images chargées.
+     */
+    private BufferedImage[] chargerApparences(String chemin) {
+        File dossier = new File(chemin);
+        File[] fichiers = dossier.listFiles((f, name) -> name.endsWith(".png"));
+
+        if (fichiers == null) return new BufferedImage[0];
+
+        BufferedImage[] sprites = new BufferedImage[fichiers.length];
+        for (int i = 0; i < fichiers.length; i++) {
+            try {
+                sprites[i] = ImageIO.read(fichiers[i]);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return sprites;
     }
 
-    public List<String> getHauts() {
-        return hauts;
+    /**
+     * Charge une image spécifique depuis un chemin donné.
+     * @param chemin Le chemin de l'image à charger.
+     * @return L'image chargée sous forme de BufferedImage, ou null si l'image n'existe pas.
+     */
+    private BufferedImage chargerImage(String chemin) {
+        File fichier = new File(chemin);
+        if (!fichier.exists()) {
+            System.err.println("Image manquante : " + chemin);
+            return null;
+        }
+
+        try {
+            return ImageIO.read(fichier);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
-    public List<String> getBas() {
+    // Getters pour accéder aux tableaux d'apparences
+
+    public BufferedImage[] getCheveux() {
+        return cheveux;
+    }
+
+    public BufferedImage[] getHaut() {
+        return haut;
+    }
+
+    public BufferedImage[] getBas() {
         return bas;
     }
 
-    public List<String> getChaussures() {
-        return chaussures;
+    public BufferedImage getCorps(String direction, int frame) {
+        String chemin = String.format("src/res/Assets/Corps/corps_%s_%d.png", direction, frame);
+        System.out.println("Chemin absolu testé : " + new File(chemin).getAbsolutePath());
+        return chargerImage(chemin);
     }
 
-    public List<String> getCouleursPeau() {
-        return couleursPeau;
+
+    public BufferedImage getCheveux(int index, String direction, int frame) {
+        String chemin = String.format("res/Assets/Cheveux/cheveux%d_%s_%d.png", index, direction, frame);
+        return chargerImage(chemin);
     }
+
+    public BufferedImage getHaut(int index, String direction, int frame) {
+        String chemin = String.format("res/Assets/Haut/haut%d_%s_%d.png", index, direction, frame);
+        return chargerImage(chemin);
+    }
+
+    public BufferedImage getBas(int index, String direction, int frame) {
+        String chemin = String.format("res/Assets/Bas/bas%d_%s_%d.png", index, direction, frame);
+        return chargerImage(chemin);
+    }
+
 }
