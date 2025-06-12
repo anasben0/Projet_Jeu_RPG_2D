@@ -279,6 +279,7 @@ public class Joueur extends Entite {
         BufferedImage haut = catalogue.getHaut(indexHaut +1, direction, frame);
         BufferedImage cheveux = catalogue.getCheveux(indexCheveux +1, direction, frame);
         BufferedImage corps = catalogue.getCorps(direction, frame);
+        BufferedImage épée = catalogue.getEpee(direction, frame);
 
         // Si le joueur est en train d'attaquer, on utilise les images d'attaque
         if (attacking) {
@@ -304,14 +305,36 @@ public class Joueur extends Entite {
         if (invincible){
             g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
         }
-        // Dessine le joueur avec les images de personnalisation
-        g2.drawImage(corps, tempScreenX, tempScreenY, gp.TileSize, gp.TileSize, null);
-        if (bas != null) g2.drawImage(bas, tempScreenX, tempScreenY, gp.TileSize, gp.TileSize, null);
-        if (haut != null) g2.drawImage(haut, tempScreenX, tempScreenY, gp.TileSize, gp.TileSize, null);
-        if (cheveux != null) g2.drawImage(cheveux, tempScreenX, tempScreenY, gp.TileSize, gp.TileSize, null);
+
+        if (!attacking) {
+            // Dessine le joueur avec les images de personnalisation
+            g2.drawImage(corps, tempScreenX, tempScreenY, gp.TileSize, gp.TileSize, null);
+            if (bas != null) g2.drawImage(bas, tempScreenX, tempScreenY, gp.TileSize, gp.TileSize, null);
+            if (haut != null) g2.drawImage(haut, tempScreenX, tempScreenY, gp.TileSize, gp.TileSize, null);
+            if (cheveux != null) g2.drawImage(cheveux, tempScreenX, tempScreenY, gp.TileSize, gp.TileSize, null);
+        }
+
+        /*
+        // Dessine l'attaque si le joueur est en train d'attaquer
         if (attack == attackup2 || attack == attackdown2) g2.drawImage(attack, tempScreenX, tempScreenY, gp.TileSize, gp.TileSize*2, null);
         if (attack == attackright2 || attack == attackleft2) g2.drawImage(attack, tempScreenX, tempScreenY, gp.TileSize*2, gp.TileSize, null);
         // on reset l'opacité à 1 pour les prochaines images
+        */ 
+
+        if (attack == attackup2 || attack == attackdown2) {
+            g2.drawImage(corps, tempScreenX, tempScreenY, gp.TileSize, gp.TileSize*2, null);
+            if (bas != null) g2.drawImage(bas, tempScreenX, tempScreenY, gp.TileSize, gp.TileSize*2, null);
+            if (haut != null) g2.drawImage(haut, tempScreenX, tempScreenY, gp.TileSize, gp.TileSize*2, null);
+            if (cheveux != null) g2.drawImage(cheveux, tempScreenX, tempScreenY, gp.TileSize, gp.TileSize*2, null);
+            g2.drawImage(épée, tempScreenX, tempScreenY, gp.TileSize, gp.TileSize*2, null);
+        }
+        if (attack == attackright2 || attack == attackleft2) {
+            g2.drawImage(corps, tempScreenX, tempScreenY, gp.TileSize*2, gp.TileSize, null);
+            if (bas != null) g2.drawImage(bas, tempScreenX, tempScreenY, gp.TileSize*2, gp.TileSize, null);
+            if (haut != null) g2.drawImage(haut, tempScreenX, tempScreenY, gp.TileSize*2, gp.TileSize, null);
+            if (cheveux != null) g2.drawImage(cheveux, tempScreenX, tempScreenY, gp.TileSize*2, gp.TileSize, null);
+            g2.drawImage(épée, tempScreenX, tempScreenY, gp.TileSize*2, gp.TileSize, null);
+        }
         g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
         
     }
