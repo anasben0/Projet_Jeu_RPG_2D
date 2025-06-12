@@ -8,14 +8,13 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 import model.personnalisation.CatalogueApparence;
-import model.personnalisation.Personnalisation;
 
 /**
  * Classe Joueur qui hérite de la classe Entité.
  * Elle représente le joueur dans le jeu, avec ses caractéristiques et son inventaire.
  */
 public class Joueur extends Entite {
-    private Personnalisation personnalisation;
+    //private Personnalisation personnalisation;
     private int indexCheveux;
     private int indexHaut;
     private int indexBas;
@@ -352,14 +351,6 @@ public class Joueur extends Entite {
         
     }
 
-    // Getters and Setters
-    public Personnalisation getPersonnalisation() {
-        return personnalisation;
-    }
-
-    public void setPersonnalisation(Personnalisation personnalisation) {
-        this.personnalisation = personnalisation;
-    }
 
     public int getIndexCheveux() {
         return indexCheveux;
