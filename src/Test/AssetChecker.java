@@ -39,6 +39,10 @@ public class AssetChecker {
         gp.pnj[0].Worldx = 21 * gp.TileSize;
         gp.pnj[0].Worldy = 21 * gp.TileSize;
 
+        gp.pnj[1] = new PNJ(gp);
+        gp.pnj[1].Worldx = 38 * gp.TileSize;
+        gp.pnj[1].Worldy = 12 * gp.TileSize;
+
     }
 
     public void setMonstre() {
@@ -50,6 +54,10 @@ public class AssetChecker {
             gp.monstre[1] = new Monstre(gp);
             gp.monstre[1].Worldx = 23 * gp.TileSize;
             gp.monstre[1].Worldy = 37 * gp.TileSize;
+
+            gp.monstre[2] = new Monstre(gp);
+            gp.monstre[2].Worldx = 38 * gp.TileSize;
+            gp.monstre[2].Worldy = 13 * gp.TileSize;
 
             System.out.println("Monstres initialisés avec succès");
         } catch (Exception e) {

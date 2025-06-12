@@ -1,12 +1,9 @@
 package controller;
 
+import Test.GamePanel;
 import model.entite.Joueur;
 import model.personnalisation.CatalogueApparence;
 import view.ViewPersonnalisation;
-
-import java.awt.event.MouseEvent;
-
-import Test.GamePanel;
 
 public class ControllerPersonnalisation {
 
@@ -57,6 +54,8 @@ public class ControllerPersonnalisation {
         if (y > 500 && y < 540 && x > 340 && x < 440) {
             System.out.println("Personnalisation validée !");
             view.getGamePanel().gameState = view.getGamePanel().playState;
+            gp.stopMusic();
+            gp.playMusic(0);
             return;
         }
 
