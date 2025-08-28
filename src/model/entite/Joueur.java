@@ -51,10 +51,10 @@ public class Joueur extends Entite {
         getJoueurAttaqueImage();
     }
     public void SetDefaultValues(){
-        //Worldx =gp.TileSize*23;
-        //Worldy =gp.TileSize*21;
-        Worldx =gp.TileSize*10;
-        Worldy =gp.TileSize*11;
+        //Worldx =gp.TileSize*10;
+        //Worldy =gp.TileSize*11;
+        Worldx =gp.TileSize*23;
+        Worldy =gp.TileSize*21;
         speed =4;
         direction = "down";
 

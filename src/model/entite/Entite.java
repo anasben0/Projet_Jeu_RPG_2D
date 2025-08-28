@@ -2,6 +2,7 @@ package model.entite;
 
 import Test.GamePanel;
 import java.awt.AlphaComposite;
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
@@ -142,6 +143,20 @@ public abstract class Entite {
                 case "left":  imageToDraw = (SpriteNum == 1) ? left1 : left2; break;
                 case "right": imageToDraw = (SpriteNum == 1) ? right1 : right2; break;
             }
+
+
+            // Monster HP bar
+            if (type == 2){
+
+                double oneScale = (double)gp.TileSize/maxLife;
+                double hpBarValue = oneScale * life;
+                g2.setColor(new Color(35,35,35));
+                g2.fillRect(screenX-1, screenY-16, gp.TileSize+2, 12);
+
+                g2.setColor(new Color(255,0,30));
+                g2.fillRect(screenX, screenY-15, (int)hpBarValue, 10);
+            }
+            
 
             if (invincible){
                 g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.6f));
