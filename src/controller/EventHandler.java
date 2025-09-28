@@ -92,6 +92,7 @@ public class EventHandler {
     public void Fontaine(int gameState, int col, int row){
         if(gp.KeyH.enterPressed) {
             gp.gameState = gameState;
+            gp.joueur.attackCanceled=true;
             gp.ui.currentDialogue = "La fontaine de Jouvence te redonnes \nde la vie !";
             gp.joueur.life += 1;
             if(gp.joueur.life > gp.joueur.maxLife){

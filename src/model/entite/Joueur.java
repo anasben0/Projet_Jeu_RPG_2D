@@ -28,6 +28,7 @@ public class Joueur extends Entite {
     KeyHandlerJoueur KeyH;
     int standCounter = 0; // Compteur pour l'animation de marche
     public int hasKey = 0; // Indique si le joueur a la clé (0 = non, 1 = oui)
+    public boolean attackCanceled = false;
 
 
     public Joueur (int vie, GamePanel gp, KeyHandlerJoueur KeyH) {
@@ -143,6 +144,12 @@ public class Joueur extends Entite {
                     case "right": Worldx += speed; break;
                 }
             }
+
+            if(KeyH.enterPressed==true && attackCanceled == false){
+                attacking = true;
+                SpriteCounter = 0;
+            }
+            attackCanceled = false;
             gp.KeyH.enterPressed = false; // Réinitialise la touche entrée
 
             SpriteCounter ++;
@@ -235,13 +242,12 @@ public class Joueur extends Entite {
         if(gp.KeyH.enterPressed == true){
 
             if (index != 999){
+                attackCanceled = true;
                 gp.gameState = gp.dialogueState; // Change l'état du jeu pour afficher le dialogue
                 gp.pnj[index].speak(); // Appelle la méthode speak du PNJ pour afficher son dialogue
 
             }
-            else {
-                attacking = true; // Le joueur attaque
-            }
+            
 
         }
         
